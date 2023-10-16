@@ -117,7 +117,14 @@
         </div>
         <div v-on="nowSolving ? { click: stopSolve } : { click: startSolve }"
           class="text-center mt-9 w-full py-20 cursor-pointer">
-          <span class="text-5xl lg:text-9xl md:text-7xl font-sans">{{ time }}</span>
+          <span class="text-5xl lg:text-9xl md:text-7xl font-sans">
+            <span id="hours" v-if="hours" class="px-4">{{ hours }}</span>
+            <span id="fC" v-if="firstColon">{{ firstColon }}</span>
+            <span id="minutes" v-if="minutes" class="px-4">{{ minutes }}</span>
+            <span id="sC" v-if="secondColon">{{ secondColon }}</span>
+            <span id="seconds" v-if="seconds" class="px-4">{{ seconds }}</span>
+            <span id="basicTime" v-if="basicTime">{{ basicTime }}</span>
+          </span>
         </div>
       </div>
     </main>
@@ -154,10 +161,18 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
-let time = ref('0.00')
 let startTime = 0
 let endTime = 0
 let nowSolving = ref(false)
+let timeInterval;
+
+let basicTime = ref('0.00')
+
+let seconds = ref(null)
+let minutes = ref(null)
+let hours = ref(null)
+let firstColon = ref(null)
+let secondColon = ref(null)
 
 function logout() {
   store.dispatch('logout')
@@ -168,28 +183,70 @@ function logout() {
 
 function startSolve() {
   if (!nowSolving.value) {
-    time.value = (0).toFixed(2)
-    console.log('start')
+    // Clear all displayed variables
+    basicTime.value = null
+    hours.value = null
+    minutes.value = null
+    firstColon.value = null
+    secondColon.value = null
+    seconds.value = 0
+
+    // Update solving status
     nowSolving.value = true
+
     startTime = Date.now()
-    setInterval(() => {
-      if (nowSolving.value) {
-        time.value += 100
+
+    // Update timer every .01s
+    timeInterval = setInterval(() => {
+      seconds.value = (parseFloat(seconds.value) + 0.01).toFixed(2)
+      if (seconds.value > 59.99) {
+        minutes.value = minutes.value + 1
+        seconds.value = '0'
+        secondColon.value = ':'
       }
-    }, 1000)
+      if (minutes.value > 59) {
+        hours.value = hours.value + 1
+        minutes.value = '0'
+        firstColon.value = ':'
+      }
+    }, 10)
   }
 }
 
 function stopSolve() {
   if (nowSolving.value) {
-    console.log('stop')
+    // Stop timer 
+    clearInterval(timeInterval)
+
+    // Update solving status
     nowSolving.value = false
+
     endTime = Date.now()
-    time.value = ((endTime - startTime) / 1000).toFixed(2)
+
+    // Transform miliseconds to hours, minutes and seconds 
+    transformMiliseconds(endTime - startTime)
+  }
+}
+
+function transformMiliseconds(miliseconds) {
+  seconds.value = ((endTime - startTime) / 1000)
+  minutes.value = (parseInt(seconds.value / 60) > 0) ? parseInt(seconds.value / 60) : null
+  hours.value = (parseInt(minutes.value / 60) > 0) ? parseInt(minutes.value / 60) : null
+
+  seconds.value = parseFloat((seconds.value - minutes.value * 60).toFixed(2))
+
+  if (minutes.value) {
+    minutes.value = minutes.value - hours.value * 60
+    secondColon.value = ':'
+  }
+
+  if (hours.value) {
+    firstColon.value = ':'
   }
 }
 
 function generateNewScramble() {
 
 }
+
 </script>
