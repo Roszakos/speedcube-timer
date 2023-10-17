@@ -160,9 +160,9 @@ let endTime = 0
 let nowSolving = ref(false)
 let timeInterval;
 
-let basicTime = ref('0.00')
+let basicTime = ref(null)
 
-let seconds = ref(null)
+let seconds = ref('0.00')
 let minutes = ref(null)
 let hours = ref(null)
 let firstColon = ref(null)
@@ -204,6 +204,7 @@ function handleSpaceDown() {
     }
     return
   }
+  resetTimer()
   preparationStart = Date.now()
   preparingTimer.value = true
 }
@@ -228,6 +229,7 @@ function handleMouseDown() {
 
   preparationStart = Date.now()
   preparingTimer.value = true
+  resetTimer()
 
   setTimeout(function () {
     if (preparationStart) {
@@ -351,4 +353,11 @@ function generateMove(availableMoves) {
   return availableMoves[Math.floor(Math.random() * availableMoves.length)]
 }
 
+function resetTimer() {
+  seconds.value = '0.00'
+  minutes.value = null
+  hours.value = null
+  firstColon.value = null
+  secondColon.value = null
+}
 </script>
