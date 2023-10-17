@@ -112,8 +112,9 @@
     </header>
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div @click="generateNewScramble" class="text-1xl text-center mt-9 lg:text-3xl md:text-2xl font-semibold">
-          D' L U L D' U' B R2 B2 U2 R2 F L' F U' F2 L2 F' D L2
+        <div @click="generateNewScramble"
+          class="text-1xl text-center cursor-pointer mt-9 lg:text-3xl md:text-2xl font-semibold">
+          {{ scramble }}
         </div>
         <div v-on="nowSolving ? { click: stopSolve } : { click: startSolve }"
           class="text-center mt-9 w-full py-20 cursor-pointer">
@@ -174,6 +175,15 @@ let hours = ref(null)
 let firstColon = ref(null)
 let secondColon = ref(null)
 
+// Properties for scrambling algorithm
+const moves = store.state.cube.moves
+const movesExcludedBy = store.state.cube.movesExcludedBy
+const excludeSustainedBy = store.state.cube.excludeSustainedBy
+
+let scramble = ref('')
+
+generateNewScramble()
+
 function logout() {
   store.dispatch('logout')
     .then(() => {
@@ -225,6 +235,7 @@ function stopSolve() {
 
     // Transform miliseconds to hours, minutes and seconds 
     transformMiliseconds(endTime - startTime)
+    generateNewScramble()
   }
 }
 
@@ -233,7 +244,7 @@ function transformMiliseconds(miliseconds) {
   minutes.value = (parseInt(seconds.value / 60) > 0) ? parseInt(seconds.value / 60) : null
   hours.value = (parseInt(minutes.value / 60) > 0) ? parseInt(minutes.value / 60) : null
 
-  seconds.value = parseFloat((seconds.value - minutes.value * 60).toFixed(2))
+  seconds.value = (seconds.value - minutes.value * 60).toFixed(2)
 
   if (minutes.value) {
     minutes.value = minutes.value - hours.value * 60
@@ -246,7 +257,37 @@ function transformMiliseconds(miliseconds) {
 }
 
 function generateNewScramble() {
+  let lastMove = generateMove(moves)
+  let oneBeforeLast;
+  let tempScramble = lastMove
+  let excluded = movesExcludedBy[lastMove.charAt(0)]
 
+  let availableMoves = moves.filter(move => !excluded.includes(move))
+
+  for (let i = 0; i < 19; i++) {
+    oneBeforeLast = lastMove
+    lastMove = generateMove(availableMoves)
+    tempScramble = tempScramble + ' ' + lastMove
+
+    if (excluded.length == 6) {
+      excluded = movesExcludedBy[oneBeforeLast.charAt(0)]
+    }
+
+
+    if (excludeSustainedBy[oneBeforeLast.charAt(0)] == lastMove.charAt(0)) {
+      excluded = excluded.concat(movesExcludedBy[lastMove.charAt(0)])
+    } else {
+      excluded = movesExcludedBy[lastMove.charAt(0)]
+    }
+
+    availableMoves = moves.filter(move => !excluded.includes(move))
+  }
+
+  scramble.value = tempScramble
+}
+
+function generateMove(availableMoves) {
+  return availableMoves[Math.floor(Math.random() * availableMoves.length)]
 }
 
 </script>

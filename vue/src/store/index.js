@@ -6,6 +6,25 @@ const store = createStore({
         user: {
             data: {},
             token: sessionStorage.getItem('TOKEN')
+        },
+        cube: {
+            moves: ["R", "R'", "L", "L'", "U", "U'", "D", "D'", "F", "F'", "B", "B'", "R2", "L2", "U2", "D2", "F2", "B2"],
+            movesExcludedBy: {
+                R: ["R", "R'", "R2"],
+                L: ["L", "L'", "L2"],
+                U: ["U", "U'", "U2"],
+                D: ["D", "D'", "D2"],
+                F: ["F", "F'", "F2"],
+                B: ["B", "B'", "B2"]
+            },
+            excludeSustainedBy: {
+                R: "L",
+                L: "R",
+                U: "D",
+                D: "U",
+                F: "B",
+                B: "F"
+            }
         }
     },
     actions: {
