@@ -1,12 +1,5 @@
 <template>
-  <!--
-    This example requires updating your template:
-
-    ```
-    <html class="h-full bg-gray-100">
-    <body class="h-full">
-    ```
-  -->
+  <GlobalEvents @keydown.space="handleSpaceDown" @keyup.space="handleSpaceUp" />
   <div class="min-h-full">
     <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
       <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
@@ -113,12 +106,12 @@
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <div @click="generateNewScramble"
-          class="text-1xl text-center cursor-pointer mt-9 lg:text-3xl md:text-2xl font-semibold">
+          class="text-1xl text-center cursor-pointer mt-9 lg:text-3xl md:text-2xl font-semibold select-none">
           {{ scramble }}
         </div>
-        <div v-on="nowSolving ? { click: stopSolve } : { click: startSolve }"
-          class="text-center mt-9 w-full py-20 cursor-pointer">
-          <span class="text-5xl lg:text-9xl md:text-7xl font-sans">
+        <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center mt-9 w-full py-20 cursor-pointer">
+          <span class="text-5xl lg:text-9xl md:text-7xl font-sans select-none"
+            :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer }">
             <span id="hours" v-if="hours" class="px-4">{{ hours }}</span>
             <span id="fC" v-if="firstColon">{{ firstColon }}</span>
             <span id="minutes" v-if="minutes" class="px-4">{{ minutes }}</span>
@@ -182,6 +175,11 @@ const excludeSustainedBy = store.state.cube.excludeSustainedBy
 
 let scramble = ref('')
 
+
+let preparationStart = 0
+let preparingTimer = ref(false)
+let canStartTimer = ref(false)
+
 generateNewScramble()
 
 function logout() {
@@ -191,8 +189,72 @@ function logout() {
     })
 }
 
+function handleSpaceDown() {
+  // Check if timer is running
+  if (nowSolving.value) {
+    stopSolve()
+    return
+  }
+
+  // Check if space is pressed long enough
+  if (preparationStart) {
+    if (Date.now() - preparationStart > 300) {
+      preparingTimer.value = false
+      canStartTimer.value = true
+    }
+    return
+  }
+  preparationStart = Date.now()
+  preparingTimer.value = true
+}
+
+function handleSpaceUp() {
+  // Start timer if space was pressed long enough
+  if (canStartTimer.value) {
+    startSolve()
+    canStartTimer.value = false
+  }
+  preparingTimer.value = false
+  preparationStart = 0
+}
+
+function handleMouseDown() {
+  // Check if timer is running
+  if (nowSolving.value) {
+    stopSolve()
+    return
+  }
+
+
+  preparationStart = Date.now()
+  preparingTimer.value = true
+
+  setTimeout(function () {
+    if (preparationStart) {
+      canStartTimer.value = true
+    }
+  }, 300)
+}
+
+function handleMouseUp() {
+  // Start timer if mouse was pressed long enough
+  if (preparationStart) {
+    if (Date.now() - preparationStart > 400) {
+      preparingTimer.value = false
+      canStartTimer.value = true
+    }
+    if (canStartTimer.value) {
+      startSolve()
+      canStartTimer.value = false
+    }
+    preparingTimer.value = false
+    preparationStart = 0
+  }
+}
+
 function startSolve() {
   if (!nowSolving.value) {
+    preparationStart = 0
     // Clear all displayed variables
     basicTime.value = null
     hours.value = null
@@ -269,11 +331,10 @@ function generateNewScramble() {
     lastMove = generateMove(availableMoves)
     tempScramble = tempScramble + ' ' + lastMove
 
+    // Update moves that shouldn't be generated after last 2 moves
     if (excluded.length == 6) {
       excluded = movesExcludedBy[oneBeforeLast.charAt(0)]
     }
-
-
     if (excludeSustainedBy[oneBeforeLast.charAt(0)] == lastMove.charAt(0)) {
       excluded = excluded.concat(movesExcludedBy[lastMove.charAt(0)])
     } else {
