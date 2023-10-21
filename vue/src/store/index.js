@@ -7,7 +7,12 @@ const store = createStore({
             data: {},
             token: sessionStorage.getItem('TOKEN')
         },
-        cube: {
+        session: {
+            hash: null,
+            puzzle: '3x3',
+            times: []
+        },
+        scrambler: {
             moves: ["R", "R'", "L", "L'", "U", "U'", "D", "D'", "F", "F'", "B", "B'", "R2", "L2", "U2", "D2", "F2", "B2"],
             movesExcludedBy: {
                 R: ["R", "R'", "R2"],
@@ -57,6 +62,49 @@ const store = createStore({
                 .catch((err) => {
                     throw err
                 })
+        },
+        saveSolve({state}, {time, scramble}) {
+            let data = {
+                hash: state.session.hash,
+                puzzle: state.session.puzzle,
+                time: time,
+                scramble: scramble
+            }
+
+            return axiosClient.put('/solve', data)
+                .then(response => {
+                    return response
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
+        getSessionData({commit}) {
+            return axiosClient.get('/session')
+                .then(response => {
+                    commit('setSessionData', response.data)
+                    return response
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
+        getSessionId({commit}) {
+            if (sessionStorage.getItem('SESSION_ID')) {
+                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+            } else {
+                let result = ''
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+                const charactersLength = characters.length
+                let counter = 0
+                while (counter < 22) {
+                    result = result + characters.charAt(Math.floor(Math.random() * charactersLength))
+                    counter = counter + 1
+                }
+
+                sessionStorage.setItem('SESSION_ID', result)
+                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+            }
         }
     },
     mutations: {
@@ -69,6 +117,9 @@ const store = createStore({
             state.user.token = null
             state.user.data = {}
             sessionStorage.clear()
+        },
+        setSessionId: (state, sessionHash) => {
+            state.session.hash = sessionHash
         }
     },
     getters: {},

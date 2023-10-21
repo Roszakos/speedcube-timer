@@ -14,6 +14,8 @@ return new class extends Migration {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class, 'user_id');
+            $table->char('hash', 22)->unique();
+            $table->string('puzzle');
             $table->timestamp('start_date');
         });
     }

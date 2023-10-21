@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SolveController;
+use App\Http\Controllers\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/solve', [SolveController::class, 'store']);
+    Route::get('/session', [SessionController::class, 'getSessionData']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

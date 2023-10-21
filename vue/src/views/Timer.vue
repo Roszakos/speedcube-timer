@@ -105,10 +105,13 @@
     </header>
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <!-- Scramble -->
         <div @click="generateNewScramble"
           class="text-1xl text-center cursor-pointer mt-9 lg:text-3xl md:text-2xl font-semibold select-none">
           {{ scramble }}
         </div>
+
+        <!-- Timer -->
         <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center mt-9 w-full py-20 cursor-pointer">
           <span class="text-5xl lg:text-9xl md:text-7xl font-sans select-none"
             :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer }">
@@ -118,8 +121,23 @@
             <span id="sC" v-if="secondColon">{{ secondColon }}</span>
             <span id="seconds" v-if="seconds" class="px-4">{{ seconds }}</span>
             <span id="basicTime" v-if="basicTime">{{ basicTime }}</span>
+
           </span>
         </div>
+
+        <!-- Times -->
+        <div class="container">
+          <div v-if="times.length" v-for="x in times.length" :key="x">
+            <div>
+              <span class="font-bold text-indigo-600">{{ times.length - (x - 1) }}. {{ displaySavedTime(times[times.length
+                - x].time) }}
+              </span> -
+              {{ times[times.length - x].scramble }}
+
+            </div>
+          </div>
+        </div>
+        {{ sessionHash }}
       </div>
     </main>
   </div>
@@ -168,10 +186,11 @@ let hours = ref(null)
 let firstColon = ref(null)
 let secondColon = ref(null)
 
+
 // Properties for scrambling algorithm
-const moves = store.state.cube.moves
-const movesExcludedBy = store.state.cube.movesExcludedBy
-const excludeSustainedBy = store.state.cube.excludeSustainedBy
+const moves = store.state.scrambler.moves
+const movesExcludedBy = store.state.scrambler.movesExcludedBy
+const excludeSustainedBy = store.state.scrambler.excludeSustainedBy
 
 let scramble = ref('')
 
@@ -179,6 +198,13 @@ let scramble = ref('')
 let preparationStart = 0
 let preparingTimer = ref(false)
 let canStartTimer = ref(false)
+
+store.dispatch('getSessionId')
+
+const times = store.state.session.times
+const sessionHash = store.state.session.hash
+
+
 
 generateNewScramble()
 
@@ -234,6 +260,7 @@ function handleMouseDown() {
   setTimeout(function () {
     if (preparationStart) {
       canStartTimer.value = true
+      preparingTimer.value = false
     }
   }, 300)
 }
@@ -298,12 +325,15 @@ function stopSolve() {
     endTime = Date.now()
 
     // Transform miliseconds to hours, minutes and seconds 
-    transformMiliseconds(endTime - startTime)
+    displayTime(endTime - startTime)
+
+    saveTime(endTime - startTime, scramble.value)
+
     generateNewScramble()
   }
 }
 
-function transformMiliseconds(miliseconds) {
+function displayTime(miliseconds) {
   seconds.value = ((endTime - startTime) / 1000)
   minutes.value = (parseInt(seconds.value / 60) > 0) ? parseInt(seconds.value / 60) : null
   hours.value = (parseInt(minutes.value / 60) > 0) ? parseInt(minutes.value / 60) : null
@@ -318,6 +348,28 @@ function transformMiliseconds(miliseconds) {
   if (hours.value) {
     firstColon.value = ':'
   }
+}
+
+function displaySavedTime(miliseconds) {
+  let secondColon = ''
+  let firstColon = ''
+
+  let seconds = ((miliseconds) / 1000)
+  let minutes = (parseInt(seconds / 60) > 0) ? parseInt(seconds / 60) : ''
+  let hours = (parseInt(minutes / 60) > 0) ? parseInt(minutes / 60) : ''
+
+  seconds = (seconds - minutes * 60).toFixed(2)
+
+  if (minutes) {
+    minutes = minutes - hours * 60
+    secondColon = ':'
+  }
+
+  if (hours) {
+    firstColon = ':'
+  }
+
+  return hours + firstColon + minutes + secondColon + seconds
 }
 
 function generateNewScramble() {
@@ -359,5 +411,11 @@ function resetTimer() {
   hours.value = null
   firstColon.value = null
   secondColon.value = null
+}
+
+// Store time in state, session and DB
+function saveTime(time, scramble) {
+  store.state.session.times.push({ time: time, scramble: scramble })
+  store.dispatch("saveSolve", { time: time, scramble: scramble }).then(response => { console.log(response) })
 }
 </script>

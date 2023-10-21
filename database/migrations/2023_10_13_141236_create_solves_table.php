@@ -14,10 +14,9 @@ return new class extends Migration {
         Schema::create('solves', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Session::class, 'session_id');
-            $table->string('puzzle');
             $table->string('scramble');
-            $table->integer('time');
-            $table->timestamp('created_at');
+            $table->bigInteger('time');
+            $table->timestamps();
         });
     }
 
