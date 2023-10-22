@@ -12,6 +12,10 @@ const store = createStore({
             puzzle: '3x3',
             times: []
         },
+        currentSolve: {
+            time: null,
+            scramble: ''
+        },
         scrambler: {
             moves: ["R", "R'", "L", "L'", "U", "U'", "D", "D'", "F", "F'", "B", "B'", "R2", "L2", "U2", "D2", "F2", "B2"],
             movesExcludedBy: {

@@ -2,11 +2,9 @@
   <div class="flex justify-between">
     <div class="font-bold text-indigo-600 text-right w-10">{{ index }}. </div>
     <div class="basis-1/2 text-right"> {{ displaySavedTime(time) }} </div>
-    <div class="text-gray-500"> +2 </div>
-    <div class="text-gray-500"> DNF </div>
-    <div class="text-red-700 font-bold"> X </div>
-    <!-- {{ scramble }} -->
-
+    <div class="text-gray-500" @click="emit('plus2', index)"> +2 </div>
+    <div class="text-gray-500" @click="emit('dnf', index)"> DNF </div>
+    <div class="text-red-700 font-bold" @click="emit('deleteTime', index)"> X </div>
   </div>
 </template>
 

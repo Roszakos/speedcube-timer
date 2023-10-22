@@ -58,7 +58,7 @@ class SolveController extends Controller
     {
         if (Session::where('hash', '=', $request['hash'])->exists()) {
             $sessionId = Session::where('hash', '=', $request['hash'])->first()->id;
-            return Solve::select('hash', 'time', 'scramble')->where('session_id', '=', $sessionId)->get();
+            return Solve::select('hash', 'time', 'scramble', 'plus2', 'dnf')->where('session_id', '=', $sessionId)->get();
         }
     }
 }
