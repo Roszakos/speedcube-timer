@@ -12,8 +12,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('solves', function (Blueprint $table) {
-            $table->boolean('dnf')->after('time');
-            $table->boolean('plus2')->after('time');
+            $table->boolean('dnf')->after('time')->default(false);
+            $table->boolean('plus2')->after('time')->default(false);
         });
     }
 };

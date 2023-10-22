@@ -15,7 +15,8 @@ class Solve extends Model
     const PUZZLE_TYPE_6X6 = '6x6';
     const PUZZLE_TYPE_7X7 = '7x7';
 
-    protected $fillable = ['session_id', 'hash', 'time', 'scramble'];
+
+    protected $fillable = ['session_id', 'hash', 'time', 'plus2', 'dnf', 'scramble'];
 
 
 

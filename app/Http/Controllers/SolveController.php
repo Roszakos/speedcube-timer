@@ -46,6 +46,9 @@ class SolveController extends Controller
                 'scramble' => 'required|string'
             ]);
 
+            $data['plus2'] = false;
+            $data['dnf'] = false;
+
             if ($solve = Solve::create($data)) {
                 return $solve->hash;
             }
