@@ -37,15 +37,28 @@ class SolveController extends Controller
                 $request['session_id'] = $session->id;
             }
 
+            $request['hash'] = substr(bin2hex(random_bytes(22)), 0, 22);
+
             $data = $request->validate([
                 'session_id' => 'required',
+                'hash' => 'required|alpha_num:ascii',
                 'time' => 'required|numeric',
                 'scramble' => 'required|string'
             ]);
 
-            return Solve::create($data);
+            if ($solve = Solve::create($data)) {
+                return $solve->hash;
+            }
         } else {
-            return response('wrong hash');
+            return response('wrong session hash');
+        }
+    }
+
+    public function getSessionSolves(Request $request)
+    {
+        if (Session::where('hash', '=', $request['hash'])->exists()) {
+            $sessionId = Session::where('hash', '=', $request['hash'])->first()->id;
+            return Solve::select('hash', 'time', 'scramble')->where('session_id', '=', $sessionId)->get();
         }
     }
 }

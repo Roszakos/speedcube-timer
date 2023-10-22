@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::put('/solve', [SolveController::class, 'store']);
     Route::get('/session', [SessionController::class, 'getSessionData']);
+    Route::post('/solve', [SolveController::class, 'getSessionSolves']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

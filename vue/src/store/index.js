@@ -105,6 +105,18 @@ const store = createStore({
                 sessionStorage.setItem('SESSION_ID', result)
                 commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
             }
+        },
+        loadSolves({commit}, data) {
+            return axiosClient.post('/solve', data)
+                .then(response => {
+                    if(response.data) {
+                        commit('setSolves', response.data)
+                        return response
+                    }
+                })
+                .catch(err => {
+                    throw err
+                })
         }
     },
     mutations: {
@@ -120,6 +132,9 @@ const store = createStore({
         },
         setSessionId: (state, sessionHash) => {
             state.session.hash = sessionHash
+        },
+        setSolves: (state, data) => {
+            state.session.times = data
         }
     },
     getters: {},

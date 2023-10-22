@@ -112,7 +112,7 @@
         </div>
 
         <!-- Timer -->
-        <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center mt-9 w-full py-20 cursor-pointer">
+        <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-20 cursor-pointer">
           <span class="text-5xl lg:text-9xl md:text-7xl font-sans select-none"
             :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer }">
             <span id="hours" v-if="hours" class="px-4">{{ hours }}</span>
@@ -125,16 +125,20 @@
           </span>
         </div>
 
-        <!-- Times -->
-        <div class="container">
-          <div v-if="times.length" v-for="x in times.length" :key="x">
-            <div>
-              <span class="font-bold text-indigo-600">{{ times.length - (x - 1) }}. {{ displaySavedTime(times[times.length
-                - x].time) }}
-              </span> -
-              {{ times[times.length - x].scramble }}
-
+        <!-- Times, Statistics and Scramble-->
+        <div class="container grid grid-cols-4 gap-4 h-80">
+          <div class=" bg-gray-200 shadow-md rounded-l-[20px] col-span-1 overflow-y-auto">
+            <span class="px-3 pt-2 font-semibold text-xl text-indigo-800 inline-block">Times</span>
+            <div v-if="times.length" v-for="x in times.length" :key="x">
+              <TimeListItem :index="times.length - (x - 1)" :time="times[times.length - x].time"
+                :scramble="times[times.length - x].scramble" class="pr-3 pl-1" />
             </div>
+          </div>
+          <div class=" bg-gray-200 col-span-1">
+            <span class="px-2 py-2 font-semibold text-xl text-indigo-800">Statistics</span>
+          </div>
+          <div class=" bg-gray-200 rounded-r-[20px] col-span-2">
+            <span class="px-2 py-2 font-semibold text-xl text-indigo-800">Scramble</span>
           </div>
         </div>
         {{ sessionHash }}
@@ -148,8 +152,9 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 import { useStore } from "vuex"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useRouter } from "vue-router"
+import TimeListItem from '../components/TimeListItem.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -201,8 +206,13 @@ let canStartTimer = ref(false)
 
 store.dispatch('getSessionId')
 
-const times = store.state.session.times
 const sessionHash = store.state.session.hash
+const times = computed(() => store.state.session.times)
+
+store.dispatch('loadSolves', { hash: sessionHash })
+  .then(res => { times = store.state.session.times })
+
+
 
 
 
@@ -415,7 +425,11 @@ function resetTimer() {
 
 // Store time in state, session and DB
 function saveTime(time, scramble) {
-  store.state.session.times.push({ time: time, scramble: scramble })
-  store.dispatch("saveSolve", { time: time, scramble: scramble }).then(response => { console.log(response) })
+  console.log(store.state.session)
+  store.state.session.times.push({ hash: null, time: time, scramble: scramble })
+  store.dispatch("saveSolve", { time: time, scramble: scramble })
+    .then(response => {
+      store.state.session.times[store.state.session.times.length - 1].hash = response.data
+    })
 }
 </script>

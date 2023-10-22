@@ -12,7 +12,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('solves', function (Blueprint $table) {
-            $table->timestamp('updated_at');
+            $table->char('hash', 22)->unique()->after('id');
         });
     }
 };
