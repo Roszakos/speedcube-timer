@@ -57,11 +57,18 @@ class SolveController extends Controller
         }
     }
 
-    public function getSessionSolves(Request $request)
+    public function update(Solve $solve, Request $request)
     {
-        if (Session::where('hash', '=', $request['hash'])->exists()) {
-            $sessionId = Session::where('hash', '=', $request['hash'])->first()->id;
-            return Solve::select('hash', 'time', 'scramble', 'plus2', 'dnf')->where('session_id', '=', $sessionId)->get();
-        }
+        $data = $request->validate([
+            'plus2' => 'required',
+            'dnf' => 'required'
+        ]);
+
+        return $solve->update($data);
+    }
+
+    public function destroy(Solve $solve)
+    {
+        return $solve->delete();
     }
 }

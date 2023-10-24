@@ -1,18 +1,20 @@
 
 <template>
   <div @click="generateNewScramble"
-    class="text-1xl text-center cursor-pointer mt-9 lg:text-3xl md:text-2xl font-semibold select-none">
+    class="text-1xl text-center cursor-pointer mt-6 lg:text-2xl md:text-xl font-semibold select-none">
     {{ scramble }}
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import store from '../store';
+import store from '../../store';
 
 defineExpose({
   generateNewScramble
 })
+
+const emit = defineEmits(['generateScrambleView'])
 
 let scramble = ref('')
 const moves = store.state.scrambler.moves
@@ -49,6 +51,8 @@ function generateNewScramble() {
 
   scramble.value = tempScramble
   store.state.currentSolve.scramble = tempScramble
+
+  emit('generateScrambleView')
 }
 
 function generateMove(availableMoves) {

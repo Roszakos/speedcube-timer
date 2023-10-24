@@ -75,7 +75,7 @@ const store = createStore({
                 scramble: scramble
             }
 
-            return axiosClient.put('/solve', data)
+            return axiosClient.post('/solve', data)
                 .then(response => {
                     return response
                 })
@@ -83,10 +83,22 @@ const store = createStore({
                     throw err
                 })
         },
-        getSessionData({commit}) {
-            return axiosClient.get('/session')
+        updateSolve({commit}, {hash, plus2, dnf}) {
+            const data = {
+                plus2: plus2,
+                dnf: dnf
+            }
+            return axiosClient.put(`/solve/${hash}`, data)
                 .then(response => {
-                    commit('setSessionData', response.data)
+                    return response
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
+        deleteSolve({commit}, solveHash) {
+            return axiosClient.delete(`/solve/${solveHash}`)
+                .then(response => {
                     return response
                 })
                 .catch(err => {
@@ -110,8 +122,8 @@ const store = createStore({
                 commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
             }
         },
-        loadSolves({commit}, data) {
-            return axiosClient.post('/solve', data)
+        loadSolves({commit}, sessionHash) {
+            return axiosClient.get(`/session/${sessionHash}`)
                 .then(response => {
                     if(response.data) {
                         commit('setSolves', response.data)

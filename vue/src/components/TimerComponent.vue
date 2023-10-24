@@ -1,8 +1,8 @@
 
 <template>
   <GlobalEvents @keydown.space="handleSpaceDown" @keyup.space="handleSpaceUp" />
-  <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-20 cursor-pointer">
-    <span class="text-5xl lg:text-9xl md:text-7xl font-sans select-none"
+  <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-10 pb-20 cursor-pointer">
+    <span class="text-5xl lg:text-8xl md:text-6xl font-sans select-none"
       :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer }">
       <span id="hours" v-if="hours" class="px-4">{{ hours }}</span>
       <span id="fC" v-if="firstColon">{{ firstColon }}</span>

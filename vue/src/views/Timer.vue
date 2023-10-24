@@ -99,22 +99,22 @@
 
     <header class="bg-white shadow">
       <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-gray-900 text-center">Timer</h1>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 text-center">Timer</h1>
       </div>
     </header>
     <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8">
         <!-- Scramble -->
-        <ScrambleComponent ref="scrambleComponent" />
+        <ScrambleComponent ref="scrambleComponent" @generateScrambleView="generateScrambleView" />
 
         <!-- Timer -->
         <TimerComponent @saveTime="saveTime" @generateNewScramble="generateNewScramble" />
 
         <!-- Times, Statistics and Scramble-->
-        <div class="container grid grid-cols-4 gap-4 h-80">
-          <TimesComponent :times="times" />
-          <StatisticsComponent />
-          <ScramblePreviewComponent />
+        <div class=" grid sm:grid-cols-1 gap-4 h-[23rem] md:grid-cols-2 lg:grid-cols-6 mb-5">
+          <TimesComponent class=" col-start-2" />
+          <StatisticsComponent class="" />
+          <ScramblePreviewComponent ref="scrambleViewComponent" class="max-sm:w-[38rem] hidden lg:block" />
         </div>
       </div>
     </main>
@@ -126,12 +126,12 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 import { useStore } from "vuex"
-import { ref, computed } from "vue"
+import { ref } from "vue"
 import { useRouter } from "vue-router"
 import StatisticsComponent from '../components/StatisticsComponent.vue'
 import TimesComponent from '../components/TimesComponent.vue'
-import ScramblePreviewComponent from '../components/ScramblePreviewComponent.vue'
-import ScrambleComponent from '../components/ScrambleComponent.vue'
+import ScramblePreviewComponent from '../components/scramble/ScramblePreviewComponent.vue'
+import ScrambleComponent from '../components/scramble/ScrambleComponent.vue'
 import TimerComponent from '../components/TimerComponent.vue'
 
 const store = useStore()
@@ -160,13 +160,15 @@ const userNavigation = [
 
 // Properties for scrambling algorithm
 const scrambleComponent = ref(null)
+const scrambleViewComponent = ref(null)
 
 store.dispatch('getSessionId')
 
 const sessionHash = store.state.session.hash
-const times = computed(() => store.state.session.times)
 
-store.dispatch('loadSolves', { hash: sessionHash })
+
+store.dispatch('loadSolves', sessionHash)
+
 
 
 function logout() {
@@ -180,14 +182,22 @@ function generateNewScramble() {
   scrambleComponent.value.generateNewScramble()
 }
 
+function generateScrambleView() {
+  if (scrambleViewComponent.value) {
+    scrambleViewComponent.value.generateCubeStructure()
+  }
+}
+
 // Store time in state, session and database
 function saveTime() {
   let time = store.state.currentSolve.time
   let scramble = store.state.currentSolve.scramble
-  store.state.session.times.push({ hash: null, time: time, scramble: scramble, plus2: false, dnf: false })
+  store.state.session.times.push({ hash: null, time: time, scramble: scramble, plus2: 0, dnf: 0 })
   store.dispatch("saveSolve", { time: time, scramble: scramble })
     .then(response => {
       store.state.session.times[store.state.session.times.length - 1].hash = response.data
     })
 }
+
+
 </script>

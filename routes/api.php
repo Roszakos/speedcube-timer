@@ -22,9 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::put('/solve', [SolveController::class, 'store']);
-    Route::get('/session', [SessionController::class, 'getSessionData']);
-    Route::post('/solve', [SolveController::class, 'getSessionSolves']);
+    Route::post('/solve', [SolveController::class, 'store']);
+    Route::put('/solve/{solve:hash}', [SolveController::class, 'update']);
+    Route::delete('/solve/{solve:hash}', [SolveController::class, 'destroy']);
+    Route::get('/session/{session:hash}', [SessionController::class, 'getSessionData']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
