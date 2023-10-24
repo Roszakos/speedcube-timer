@@ -3,9 +3,10 @@
     <div class="font-bold text-indigo-600 text-right w-10">{{ index }}. </div>
     <div v-if="plus2" class="basis-1/2 text-right"> {{ displaySavedTime(time + 2000) }} </div>
     <div v-else class="basis-1/2 text-right"> {{ displaySavedTime(time) }} </div>
-    <div class="text-gray-500 cursor-pointer" :class="{ 'font-bold !text-black': plus2 }"
+    <div class="text-gray-500 cursor-pointer ml-2" :class="{ 'font-bold !text-black': plus2 }"
       @click="emit('plus2', index - 1)"> +2 </div>
-    <div class="text-gray-500 cursor-pointer" :class="{ 'font-bold !text-black': dnf }" @click="emit('dnf', index - 1)">
+    <div class="text-gray-500 cursor-pointer mx-2" :class="{ 'font-bold !text-black': dnf }"
+      @click="emit('dnf', index - 1)">
       DNF </div>
     <div class="text-red-700 font-bold cursor-pointer" @click="emit('deleteTime', index - 1)"> X </div>
   </div>

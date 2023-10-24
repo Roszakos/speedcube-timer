@@ -14,6 +14,8 @@ import TimeListItem from './TimeListItem.vue';
 import { computed } from 'vue'
 import store from '../store';
 
+const emit = defineEmits(['updateStats'])
+
 const times = computed(() => store.state.session.times)
 
 function plus2(timeIndex) {
@@ -29,6 +31,7 @@ function dnf(timeIndex) {
 function deleteTime(timeIndex) {
   store.dispatch('deleteSolve', store.state.session.times[timeIndex].hash)
   store.state.session.times.splice(timeIndex, 1)
+  emit('updateStats')
 }
 
 // Update time when plus2 or DNF is clicked
@@ -37,7 +40,8 @@ function updateTime(timeIndex) {
     hash: store.state.session.times[timeIndex].hash,
     plus2: store.state.session.times[timeIndex].plus2,
     dnf: store.state.session.times[timeIndex].dnf
-  }).then()
+  })
+  emit('updateStats')
 }
 </script>
 

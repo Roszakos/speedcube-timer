@@ -2,7 +2,7 @@
 <template>
   <div class=" bg-gray-200 rounded-r-[20px] lg:col-span-2 md:col-span-2 sm:col-span-1">
     <span class="px-2 py-2 font-semibold text-xl text-indigo-800">Scramble</span>
-    <div id="cube" class="grid grid-cols-4 grid-rows-3 text-center justify-center items-center mx-6 my-6 ">
+    <div id="cube" class="grid grid-cols-4 grid-rows-3 text-center justify-center items-center w-2/3 mx-auto py-6">
       <div id="upperFace" class="grid col-span-1 col-start-2 grid-cols-3 grid-rows-3 aspect-square">
         <ScrambleFaceComponent :lTC="Cube.Corners.B1.y" :tE="Cube.Edges.B1.y" :rTC="Cube.Corners.B2.y"
           :lE="Cube.Edges.M1.y" :center="Centers.upperFace" :rE="Cube.Edges.M2.y" :lDC="Cube.Corners.F1.y"

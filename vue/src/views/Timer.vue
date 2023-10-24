@@ -111,9 +111,9 @@
         <TimerComponent @saveTime="saveTime" @generateNewScramble="generateNewScramble" />
 
         <!-- Times, Statistics and Scramble-->
-        <div class=" grid sm:grid-cols-1 gap-4 h-[23rem] md:grid-cols-2 lg:grid-cols-6 mb-5">
-          <TimesComponent class=" col-start-2" />
-          <StatisticsComponent class="" />
+        <div class=" grid sm:grid-cols-1 gap-4 h-[10rem] md:grid-cols-2 lg:grid-cols-4 max-w-screen-xl mx-auto">
+          <TimesComponent @updateStats="updateStats" class="min-w-fit" />
+          <StatisticsComponent ref="statisticsComponent" class="min-w-fit" />
           <ScramblePreviewComponent ref="scrambleViewComponent" class="max-sm:w-[38rem] hidden lg:block" />
         </div>
       </div>
@@ -161,6 +161,7 @@ const userNavigation = [
 // Properties for scrambling algorithm
 const scrambleComponent = ref(null)
 const scrambleViewComponent = ref(null)
+const statisticsComponent = ref(null)
 
 store.dispatch('getSessionId')
 
@@ -168,6 +169,9 @@ const sessionHash = store.state.session.hash
 
 
 store.dispatch('loadSolves', sessionHash)
+  .then(() => {
+    updateStats()
+  })
 
 
 
@@ -188,11 +192,16 @@ function generateScrambleView() {
   }
 }
 
+function updateStats() {
+  statisticsComponent.value.calculateStats()
+}
+
 // Store time in state, session and database
 function saveTime() {
   let time = store.state.currentSolve.time
   let scramble = store.state.currentSolve.scramble
   store.state.session.times.push({ hash: null, time: time, scramble: scramble, plus2: 0, dnf: 0 })
+  updateStats()
   store.dispatch("saveSolve", { time: time, scramble: scramble })
     .then(response => {
       store.state.session.times[store.state.session.times.length - 1].hash = response.data
