@@ -108,6 +108,7 @@ const store = createStore({
         getSessionId({commit}) {
             if (sessionStorage.getItem('SESSION_ID')) {
                 commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+                return true
             } else {
                 let result = ''
                 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -120,14 +121,31 @@ const store = createStore({
 
                 sessionStorage.setItem('SESSION_ID', result)
                 commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+                return false
             }
+        },
+        createNewSessionId({commit}) {
+            let result = ''
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+                const charactersLength = characters.length
+                let counter = 0
+                while (counter < 22) {
+                    result = result + characters.charAt(Math.floor(Math.random() * charactersLength))
+                    counter = counter + 1
+                }
+
+                sessionStorage.setItem('SESSION_ID', result)
+                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
         },
         loadSolves({commit}, sessionHash) {
             return axiosClient.get(`/session/${sessionHash}`)
                 .then(response => {
                     if(response.data) {
                         commit('setSolves', response.data)
-                        return response
+                        return true
+                    } else {
+                        commit('setSolves', [])
+                        return false
                     }
                 })
                 .catch(err => {

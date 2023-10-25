@@ -4,7 +4,8 @@
     <div v-if="times.length" v-for="x in times.length" :key="x">
       <TimeListItem :index="times.length - (x - 1)" :time="times[times.length - x].time"
         :scramble="times[times.length - x].scramble" :plus2="times[times.length - x].plus2"
-        :dnf="times[times.length - x].dnf" class="pr-3 pl-1" @plus2="plus2" @dnf="dnf" @deleteTime="deleteTime" />
+        :dnf="times[times.length - x].dnf" class="pr-3 pl-1" @plus2="plus2" @dnf="dnf" @deleteTime="deleteTime"
+        @showSolveDetails="showSolveDetails" />
     </div>
   </div>
 </template>
@@ -14,7 +15,7 @@ import TimeListItem from './TimeListItem.vue';
 import { computed } from 'vue'
 import store from '../store';
 
-const emit = defineEmits(['updateStats'])
+const emit = defineEmits(['updateStats', 'showSolveDetails'])
 
 const times = computed(() => store.state.session.times)
 
@@ -42,6 +43,10 @@ function updateTime(timeIndex) {
     dnf: store.state.session.times[timeIndex].dnf
   })
   emit('updateStats')
+}
+
+function showSolveDetails(index) {
+  emit('showSolveDetails', index)
 }
 </script>
 

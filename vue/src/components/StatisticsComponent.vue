@@ -173,7 +173,7 @@ function countAvg5(solves) {
     sum = sum + currentTime
   })
   sum = sum - worst - best
-  let avg = sum / 5
+  let avg = sum / 3
   return avg
 }
 

@@ -19,6 +19,10 @@
 import { ref } from 'vue'
 import store from '../store';
 
+defineExpose({
+  resetTimer
+})
+
 const emit = defineEmits(['saveTime', 'generateNewScramble'])
 
 let basicTime = ref(null)

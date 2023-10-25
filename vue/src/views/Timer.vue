@@ -1,5 +1,7 @@
 <template>
   <div class="min-h-full">
+    <SessionContinueModalVue v-if="showModal" @closeModal="closeModal" />
+    <SolveDetailsModal ref="solveDetailsModal" />
     <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
       <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
@@ -108,13 +110,19 @@
         <ScrambleComponent ref="scrambleComponent" @generateScrambleView="generateScrambleView" />
 
         <!-- Timer -->
-        <TimerComponent @saveTime="saveTime" @generateNewScramble="generateNewScramble" />
+        <TimerComponent @saveTime="saveTime" @generateNewScramble="generateNewScramble" ref="timerComponent" />
 
         <!-- Times, Statistics and Scramble-->
-        <div class=" grid sm:grid-cols-1 gap-4 h-[10rem] md:grid-cols-2 lg:grid-cols-4 max-w-screen-xl mx-auto">
-          <TimesComponent @updateStats="updateStats" class="min-w-fit" />
+        <div class=" grid sm:grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 max-w-screen-xl mx-auto">
+          <TimesComponent @updateStats="updateStats" @showSolveDetails="showSolveDetails" class="min-w-fit" />
           <StatisticsComponent ref="statisticsComponent" class="min-w-fit" />
-          <ScramblePreviewComponent ref="scrambleViewComponent" class="max-sm:w-[38rem] hidden lg:block" />
+          <ScramblePreviewComponent ref="scrambleViewComponent" class="max-sm:w-[38rem] hidden lg:block cursor-pointer"
+            @click="generateNewScramble" />
+        </div>
+        <div class="text-right mt-5 max-w-screen-xl m-auto">
+          <button @click="endSession" class="py-2 px-3 bg-red-500 font-semibold text-xl hover:bg-red-600">
+            End Session
+          </button>
         </div>
       </div>
     </main>
@@ -133,6 +141,8 @@ import TimesComponent from '../components/TimesComponent.vue'
 import ScramblePreviewComponent from '../components/scramble/ScramblePreviewComponent.vue'
 import ScrambleComponent from '../components/scramble/ScrambleComponent.vue'
 import TimerComponent from '../components/TimerComponent.vue'
+import SessionContinueModalVue from '../components/modals/SessionContinueModal.vue'
+import SolveDetailsModal from '../components/modals/SolveDetailsModal.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -157,19 +167,25 @@ const userNavigation = [
 ]
 
 
-
-// Properties for scrambling algorithm
+// Refs for components
 const scrambleComponent = ref(null)
 const scrambleViewComponent = ref(null)
 const statisticsComponent = ref(null)
+const solveDetailsModal = ref(null)
+const timerComponent = ref(null)
+
+const showModal = ref(false)
 
 store.dispatch('getSessionId')
 
-const sessionHash = store.state.session.hash
+let sessionHash = store.state.session.hash
 
 
 store.dispatch('loadSolves', sessionHash)
-  .then(() => {
+  .then((response) => {
+    if (response) {
+      showModal.value = true
+    }
     updateStats()
   })
 
@@ -206,6 +222,38 @@ function saveTime() {
     .then(response => {
       store.state.session.times[store.state.session.times.length - 1].hash = response.data
     })
+}
+
+function endSession() {
+  store.dispatch('createNewSessionId')
+    .then(() => {
+      sessionHash = store.state.session.hash
+      store.dispatch('loadSolves', sessionHash)
+        .then(() => {
+          updateStats()
+          timerComponent.value.resetTimer()
+        })
+    })
+}
+
+function closeModal(decision) {
+  if (decision == 'yes') {
+    showModal.value = false
+  }
+  if (decision == 'no') {
+    store.dispatch('createNewSessionId')
+      .then(() => {
+        sessionHash = store.state.session.hash
+        store.dispatch('loadSolves', sessionHash)
+          .then(() => {
+            updateStats()
+          })
+      })
+  }
+}
+
+function showSolveDetails(index) {
+  solveDetailsModal.value.showSolveDetails(index)
 }
 
 
