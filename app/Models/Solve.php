@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Solve extends Model
 {
+    use HasFactory;
+
     const PUZZLE_TYPE_2X2 = '2x2';
     const PUZZLE_TYPE_3X3 = '3x3';
     const PUZZLE_TYPE_4X4 = '4x4';
@@ -18,7 +21,9 @@ class Solve extends Model
 
     protected $fillable = ['session_id', 'hash', 'time', 'plus2', 'dnf', 'scramble'];
 
+    public function session()
+    {
+        return $this->belongsTo(Session::class);
+    }
 
-
-    use HasFactory;
 }

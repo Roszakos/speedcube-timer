@@ -42,10 +42,14 @@
                   leave-to-class="transform opacity-0 scale-95">
                   <MenuItems
                     class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <!-- <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                    <a :href="item.href"
-                      :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
-                    </MenuItem> -->
+                    <MenuItem v-slot="{ active }">
+                    <router-link to="/profile" class="cursor-pointer"
+                      :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Profile</router-link>
+                    </MenuItem>
+                    <MenuItem v-slot="{ active }">
+                    <a class="cursor-pointer"
+                      :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
+                    </MenuItem>
                     <MenuItem v-slot="{ active }">
                     <a @click="logout" class="cursor-pointer"
                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
@@ -104,7 +108,7 @@
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 text-center">Timer</h1>
       </div>
     </header>
-    <main>
+    <main class="">
       <div class="mx-auto max-w-screen-2xl py-6 sm:px-6 lg:px-8">
         <!-- Scramble -->
         <ScrambleComponent ref="scrambleComponent" @generateScrambleView="generateScrambleView" />
@@ -113,11 +117,12 @@
         <TimerComponent @saveTime="saveTime" @generateNewScramble="generateNewScramble" ref="timerComponent" />
 
         <!-- Times, Statistics and Scramble-->
-        <div class=" grid sm:grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 max-w-screen-xl mx-auto">
-          <TimesComponent @updateStats="updateStats" @showSolveDetails="showSolveDetails" class="min-w-fit" />
-          <StatisticsComponent ref="statisticsComponent" class="min-w-fit" />
-          <ScramblePreviewComponent ref="scrambleViewComponent" class="max-sm:w-[38rem] hidden lg:block cursor-pointer"
-            @click="generateNewScramble" />
+        <div class=" grid sm:grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 max-w-screen-xl mx-auto ">
+          <TimesComponent @updateStats="updateStats" @showSolveDetails="showSolveDetails"
+            class="min-w-fit  bg-[#7f7f88]" />
+          <StatisticsComponent ref="statisticsComponent" class="min-w-fit  bg-[#7f7f88]" />
+          <ScramblePreviewComponent ref="scrambleViewComponent"
+            class="max-sm:w-[38rem] hidden lg:block cursor-pointer  bg-[#7f7f88]" @click="generateNewScramble" />
         </div>
         <div class="text-right mt-5 max-w-screen-xl m-auto">
           <button @click="endSession" class="py-2 px-3 bg-red-500 font-semibold text-xl hover:bg-red-600">
@@ -160,11 +165,7 @@ const navigation = [
   // { name: 'Calendar', href: '#', current: false },
   // { name: 'Reports', href: '#', current: false },
 ]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+
 
 
 // Refs for components
@@ -180,6 +181,7 @@ store.dispatch('getSessionId')
 
 let sessionHash = store.state.session.hash
 
+changeBgColor()
 
 store.dispatch('loadSolves', sessionHash)
   .then((response) => {
@@ -189,6 +191,10 @@ store.dispatch('loadSolves', sessionHash)
     updateStats()
   })
 
+
+function changeBgColor() {
+  document.body.style.backgroundColor = '#9C9CA6'
+}
 
 
 function logout() {
@@ -247,6 +253,7 @@ function closeModal(decision) {
         store.dispatch('loadSolves', sessionHash)
           .then(() => {
             updateStats()
+            showModal.value = false
           })
       })
   }
@@ -258,3 +265,9 @@ function showSolveDetails(index) {
 
 
 </script>
+
+<style>
+body {
+  background-color: #9C9CA6;
+}
+</style>

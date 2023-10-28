@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Solve;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Session extends Model
 {
@@ -20,4 +22,15 @@ class Session extends Model
     const CREATED_AT = null;
 
     protected $fillable = ['user_id', 'hash', 'puzzle', 'start_date'];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function solve()
+    {
+        return $this->hasMany(Solve::class);
+    }
 }

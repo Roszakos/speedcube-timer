@@ -3,6 +3,7 @@ import Timer from '../views/Timer.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import AuthLayout from '../components/AuthLayout.vue'
+import Profile from '../views/Profile.vue'
 import store from '../store'
 
 const routes = [
@@ -37,6 +38,12 @@ const routes = [
                 component: Login
             }
         ]
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        meta: {requiresAuth: true},
+        component: Profile
     }
 ];
 

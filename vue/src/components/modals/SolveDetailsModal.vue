@@ -24,11 +24,9 @@ defineExpose({
 
 function showSolveDetails(index) {
   displayContent(index)
-    .then(() => {
-      showModal.value = true
-    })
+  showModal.value = true
 }
-async function displayContent(index) {
+function displayContent(index) {
   let newContent = '<div class="inline-block font-bold text-5xl my-3">' + displayTime(store.state.session.times[index].time) + '</div>'
   newContent += '<div class="font-semibold">' + store.state.session.times[index].scramble + '</div>'
   content.value = newContent

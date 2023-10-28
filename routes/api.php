@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/solve/{solve:hash}', [SolveController::class, 'update']);
     Route::delete('/solve/{solve:hash}', [SolveController::class, 'destroy']);
     Route::get('/session/{hash}', [SessionController::class, 'getSessionData']);
+    Route::get('/session', [SessionController::class, 'getAllSessions']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

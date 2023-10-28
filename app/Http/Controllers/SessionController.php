@@ -15,4 +15,19 @@ class SessionController extends Controller
             return Solve::select('hash', 'time', 'scramble', 'plus2', 'dnf')->where('session_id', '=', $sessionId)->get();
         }
     }
+
+    public function getAllSessions(Request $request)
+    {
+        $response['user'] = [
+            'nickname' => $request->user()->nickname,
+            'email' => $request->user()->email
+        ];
+        $response['sessions'] = Session::select('hash', 'puzzle', 'id')->where('user_id', $request->user()->id)->get();
+        foreach ($response['sessions'] as $session) {
+            $session['times'] = Solve::select('hash', 'time', 'plus2', 'dnf')->where('session_id', $session['id'])->get();
+            unset($session['id']);
+        }
+
+        return $response;
+    }
 }
