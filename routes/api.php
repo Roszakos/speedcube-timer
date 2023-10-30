@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/session/{hash}', [SessionController::class, 'getSessionData']);
     Route::get('/session', [SessionController::class, 'getAllSessions']);
     Route::put('/user', [UserController::class, 'update']);
+    Route::post('/user', [UserController::class, 'destroy']);
     Route::put('/password', [PasswordController::class, 'changePassword']);
 });
 

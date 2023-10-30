@@ -178,8 +178,20 @@ const store = createStore({
         },
         changePassword({commit}, data) {
             return axiosClient.put(`/password`, data)
-                .then(reposnse => {
+                .then(response => {
                     return response
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
+        deleteAccount({commit}, data) {
+            return axiosClient.post(`/user`, data)
+                .then(response => {
+                    if(response == 1) {
+                        commit('logout')
+                        return response
+                    }
                 })
                 .catch(err => {
                     throw err

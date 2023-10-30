@@ -29,7 +29,7 @@ class Session extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function solve()
+    public function solves()
     {
         return $this->hasMany(Solve::class);
     }

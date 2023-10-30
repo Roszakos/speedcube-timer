@@ -51,6 +51,7 @@
           <ProfileSessionsComponent v-if="Page.currentPage == 'sessions'" :sessions="profileData.sessions" />
           <ProfileSettingsComponent v-if="Page.currentPage == 'settings'" :user="profileData.user" />
           <ProfilePasswordChange v-if="Page.currentPage == 'passwordChange'" />
+          <ProfileAccountDelete v-if="Page.currentPage == 'deleteAccount'" />
         </div>
       </div>
     </div>
@@ -65,6 +66,7 @@ import ProfileOverviewComponent from '../components/profile/ProfileOverviewCompo
 import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue'
 import ProfileSettingsComponent from '../components/profile/ProfileSettingsComponent.vue'
 import ProfilePasswordChange from '../components/profile/ProfilePasswordChange.vue'
+import ProfileAccountDelete from '../components/profile/ProfileAccountDelete.vue'
 
 
 const profileData = ref(null)

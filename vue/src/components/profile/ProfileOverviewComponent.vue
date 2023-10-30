@@ -96,6 +96,10 @@ function bestAvg5() {
         }
       }
     })
+    if (best == 999999999) {
+      avg5.value = '-'
+      return
+    }
     avg5.value = displayTime(best)
   }
 }
@@ -112,6 +116,10 @@ function bestAvg12() {
         }
       }
     })
+    if (best == 999999999) {
+      avg12.value = '-'
+      return
+    }
     avg12.value = displayTime(best)
   }
 }

@@ -1,7 +1,6 @@
 
 <template>
   <form @submit.prevent="changePassword" class="text-left">
-    <!-- <UserImageComponent :image="userModel.image" @imageChange="setNewImage" /> -->
     <label for="current_password">
       <span class="inline-block py-2 text-lg font-bold">Current Password</span>
       <input type="password" v-model="data.currentPassword" class="w-full rounded-md">

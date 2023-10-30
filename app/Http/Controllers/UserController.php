@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -14,8 +15,8 @@ class UserController extends Controller
         $data = $request->validate([
             'nickname' => 'required|string',
             'email' => 'email|required|string',
-            'first_name' => 'string',
-            'last_name' => 'string',
+            'first_name' => 'string|nullable',
+            'last_name' => 'string|nullable',
             'image' => 'nullable|string'
         ]);
 
@@ -38,7 +39,33 @@ class UserController extends Controller
                 'last_name' => $request->user()->last_name,
             ];
         }
+    }
 
+    public function destroy(Request $request)
+    {
+        $data = $request->validate([
+            'password' => 'required'
+        ]);
+
+        if (password_verify($data['password'], $request->user()->password)) {
+            $user = $request->user();
+            $sessions = $user->sessions;
+            foreach ($sessions as $session) {
+                $session->solves()->delete();
+            }
+            $user->sessions()->delete();
+            if ($user->delete()) {
+                return true;
+            } else {
+                return response([
+                    'error' => 'Something went wrong'
+                ]);
+            }
+        } else {
+            return response([
+                'error' => 'Wrong password'
+            ]);
+        }
     }
 
     private function saveImage($image)
