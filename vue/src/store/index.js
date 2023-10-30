@@ -175,6 +175,15 @@ const store = createStore({
                 .catch(err => {
                     throw err
                 })
+        },
+        changePassword({commit}, data) {
+            return axiosClient.put(`/password`, data)
+                .then(reposnse => {
+                    return response
+                })
+                .catch(err => {
+                    throw err
+                })
         }
     },
     mutations: {

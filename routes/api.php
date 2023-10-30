@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SolveController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\PasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/session/{hash}', [SessionController::class, 'getSessionData']);
     Route::get('/session', [SessionController::class, 'getAllSessions']);
     Route::put('/user', [UserController::class, 'update']);
+    Route::put('/password', [PasswordController::class, 'changePassword']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

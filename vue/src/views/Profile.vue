@@ -50,6 +50,7 @@
           <ProfileOverviewComponent v-if="Page.currentPage == 'overview'" :sessions="profileData.sessions" />
           <ProfileSessionsComponent v-if="Page.currentPage == 'sessions'" :sessions="profileData.sessions" />
           <ProfileSettingsComponent v-if="Page.currentPage == 'settings'" :user="profileData.user" />
+          <ProfilePasswordChange v-if="Page.currentPage == 'passwordChange'" />
         </div>
       </div>
     </div>
@@ -61,8 +62,10 @@ import { ref } from 'vue'
 import { UserIcon } from '@heroicons/vue/24/outline';
 import store from '../store';
 import ProfileOverviewComponent from '../components/profile/ProfileOverviewComponent.vue'
-import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue';
-import ProfileSettingsComponent from '../components/profile/ProfileSettingsComponent.vue';
+import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue'
+import ProfileSettingsComponent from '../components/profile/ProfileSettingsComponent.vue'
+import ProfilePasswordChange from '../components/profile/ProfilePasswordChange.vue'
+
 
 const profileData = ref(null)
 
@@ -76,7 +79,6 @@ changeBgColor()
 const Page = ref({
   currentPage: 'overview',
   title: 'Overview',
-  content: 'xsds',
 
   showOverview: function () {
     this.currentPage = 'overview'
@@ -92,7 +94,7 @@ const Page = ref({
   },
   showPasswordChange: function () {
     this.currentPage = 'passwordChange'
-    this.title = 'Change Password'
+    this.title = 'Change Your Password'
   },
   showDeleteAccount: function () {
     this.currentPage = 'deleteAccount'
