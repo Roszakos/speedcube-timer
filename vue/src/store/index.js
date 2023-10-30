@@ -165,6 +165,16 @@ const store = createStore({
                 .catch(err => {
                     throw err
                 })
+        },
+        updateUser({commit}, userData) {
+            return axiosClient.put(`/user`, userData)
+                .then(response => {
+                    commit('setProfileUserData', response.data)
+                    return response
+                })
+                .catch(err => {
+                    throw err
+                })
         }
     },
     mutations: {
@@ -183,6 +193,9 @@ const store = createStore({
         },
         setSolves: (state, data) => {
             state.session.times = data
+        },
+        setProfileUserData: (state, data) => {
+            state.profile.user = data
         },
         setProfileData: (state, data) => {
             state.profile.user = data.user

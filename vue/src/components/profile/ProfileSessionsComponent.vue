@@ -85,8 +85,6 @@ function pageChange(page) {
   }
   Pagination.firstShownItem = Pagination.showItems[0] + 1
   Pagination.lastShownItem = Pagination.showItems[Pagination.showItems.length - 1] + 1
-  console.log(Pagination.firstShownItem)
-  //console.log(Pagination)
 }
 
 

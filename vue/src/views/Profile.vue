@@ -5,7 +5,13 @@
       <div class="border-r-2 h-full basis-[28%] pl-12 pr-6">
         <div class="grid grid-cols-1 items-center mt-32">
           <div v-if="profileData">
-            <div class="w-[100px] h-[100px] bg-gray-400/50 rounded-full m-auto"></div>
+            <div
+              class="bg-gray-400/50 rounded-full flex flex-col m-auto items-center justify-center relative w-[150px] h-[150px]">
+              <div v-if="profileData.user.image">
+                <img :src="profileData.user.image" alt="user_profile_image" class="w-[150px] h-[150px] rounded-full ">
+              </div>
+              <UserIcon v-else class="w-[50%] h-[50%] text-gray-500 absolute" />
+            </div>
             <div class="text-2xl font-bold mt-7">{{ profileData.user.nickname }}</div>
             <div class="text-md font-semibold mt-1">{{ profileData.user.email }}</div>
           </div>
@@ -24,8 +30,8 @@
                 Settings
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm  hover:text-black hover:bg-sky-400/90"
-                :class="[Page.currentPage == 'passwordReset' ? 'bg-sky-300' : '']" @click="Page.showPasswordReset()">
-                Reset password
+                :class="[Page.currentPage == 'passwordChange' ? 'bg-sky-300' : '']" @click="Page.showPasswordChange()">
+                Change password
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm  rounded-b-md  hover:text-black hover:bg-red-700/80"
                 :class="[Page.currentPage == 'deleteAccount' ? 'bg-red-600' : 'bg-red-500 ']"
@@ -43,6 +49,7 @@
         <div v-if="profileData" class="m-auto w-[80%] h-[90%] mt-12 relative">
           <ProfileOverviewComponent v-if="Page.currentPage == 'overview'" :sessions="profileData.sessions" />
           <ProfileSessionsComponent v-if="Page.currentPage == 'sessions'" :sessions="profileData.sessions" />
+          <ProfileSettingsComponent v-if="Page.currentPage == 'settings'" :user="profileData.user" />
         </div>
       </div>
     </div>
@@ -51,9 +58,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { UserIcon } from '@heroicons/vue/24/outline';
 import store from '../store';
 import ProfileOverviewComponent from '../components/profile/ProfileOverviewComponent.vue'
 import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue';
+import ProfileSettingsComponent from '../components/profile/ProfileSettingsComponent.vue';
 
 const profileData = ref(null)
 
@@ -81,9 +90,9 @@ const Page = ref({
     this.currentPage = 'settings'
     this.title = 'Account Settings'
   },
-  showPasswordReset: function () {
-    this.currentPage = 'passwordReset'
-    this.title = 'Reset Password'
+  showPasswordChange: function () {
+    this.currentPage = 'passwordChange'
+    this.title = 'Change Password'
   },
   showDeleteAccount: function () {
     this.currentPage = 'deleteAccount'

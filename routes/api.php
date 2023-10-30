@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SolveController;
 use App\Http\Controllers\SessionController;
 
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/solve/{solve:hash}', [SolveController::class, 'destroy']);
     Route::get('/session/{hash}', [SessionController::class, 'getSessionData']);
     Route::get('/session', [SessionController::class, 'getAllSessions']);
+    Route::put('/user', [UserController::class, 'update']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

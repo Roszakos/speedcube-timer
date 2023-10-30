@@ -90,7 +90,7 @@ function bestAvg5() {
     let best = 999999999
     props.sessions.forEach((session) => {
       if (session.times.length > 4) {
-        for (let i = session.times.length - 1; i >= 5; i--) {
+        for (let i = session.times.length; i >= 5; i--) {
           currentAvg = countAvg(session.times.slice(i - 5, i))
           best = currentAvg < best ? currentAvg : best
         }
@@ -106,7 +106,7 @@ function bestAvg12() {
     let best = 999999999
     props.sessions.forEach((session) => {
       if (session.times.length > 11) {
-        for (let i = session.times.length - 1; i >= 12; i--) {
+        for (let i = session.times.length; i >= 12; i--) {
           currentAvg = countAvg(session.times.slice(i - 12, i))
           best = currentAvg < best ? currentAvg : best
         }

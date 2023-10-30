@@ -129,7 +129,7 @@ function bestAvg5() {
   if (times.value.length > 4) {
     let currentAvg;
     let bestAvg = countAvg5(times.value.slice(times.value.length - 5))
-    for (let i = times.value.length - 1; i >= 5; i--) {
+    for (let i = times.value.length; i >= 5; i--) {
       currentAvg = countAvg5(times.value.slice(i - 5, i))
       if (currentAvg < bestAvg) {
         bestAvg = currentAvg
@@ -145,8 +145,8 @@ function bestAvg12() {
   if (times.value.length > 11) {
     let currentAvg;
     let bestAvg = countAvg12(times.value.slice(times.value.length - 12))
-    for (let i = times.value.length - 1; i >= 12; i--) {
-      currentAvg = countAvg12(times.value.slice(i - 12, i))
+    for (let i = times.value.length; i >= 12; i--) {
+      currentAvg = countAvg12(times.value.slice(i - 12, i)) //  slice(0, 12)
       if (currentAvg < bestAvg) {
         bestAvg = currentAvg
       }
