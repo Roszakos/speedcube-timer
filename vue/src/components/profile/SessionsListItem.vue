@@ -1,20 +1,40 @@
 
 <template>
   <div class="w-full border-t-2"></div>
-  <div class="flex text-sm px-2 mt-1 py-2 justify-between text-left">
+  <div class="flex text-sm px-1 mt-1 py-2 justify-between text-left">
     <span class="w-[26%]">{{ session.hash }}</span>
-    <span class="w-[14%]">{{ session.puzzle }}</span>
-    <span class="w-[14%]">{{ session.times.length }}</span>
-    <span class="w-[14%]">{{ findBest() }}</span>
-    <span class="w-[14%]">{{ findWorst() }}</span>
-    <span class="w-[14%]">{{ average() }}</span>
+    <span class="w-[13%]">{{ session.puzzle }}</span>
+    <span class="w-[13%]">{{ session.times.length }}</span>
+    <span class="w-[13%]">{{ findBest() }}</span>
+    <span class="w-[13%]">{{ findWorst() }}</span>
+    <span class="w-[13%]">{{ average() }}</span>
+    <span class="w-[13%] cursor-pointer text-sky-600 select-none" @click="showSessionDetails">details</span>
+  </div>
+  <div v-if="showDetails" class="pb-2">
+    <div class=" overflow-y-auto w-[33%] h-40 scroll-smooth border-r-2">
+      <span class="px-3 pt-2 font-semibold text-xl text-indigo-800 inline-block">Times</span>
+      <div v-for=" x  in  session.times.length " :key="x">
+        <ProfileTimeListItem :index="x" :time="session.times[x - 1].time" :scramble="session.times[x - 1].scramble"
+          :plus2="session.times[x - 1].plus2" :dnf="session.times[x - 1].dnf" class="pr-3 pl-1"
+          @showSolveDetails="showSolveDetails" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import ProfileTimeListItem from './ProfileTimeListItem.vue'
+
+let showDetails = ref(false)
+
 const props = defineProps({
   session: Object
 })
+
+function showSessionDetails() {
+  showDetails.value = !showDetails.value
+}
 
 function displayTime(miliseconds) {
   let secondColon = ''

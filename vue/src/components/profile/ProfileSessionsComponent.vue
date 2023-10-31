@@ -1,11 +1,12 @@
 <template>
-  <div class="flex font-bold text-sm px-2 mt-12 justify-between text-left pb-2">
+  <div class="flex font-bold text-sm px-1 mt-12 justify-between text-left pb-2">
     <span class="w-[26%]">Session hash</span>
-    <span class="w-[14%]">Puzzle</span>
-    <span class="w-[14%]">Solves</span>
-    <span class="w-[14%]">Best Time</span>
-    <span class="w-[14%]">Worst Time</span>
-    <span class="w-[14%]">Average</span>
+    <span class="w-[13%]">Puzzle</span>
+    <span class="w-[13%]">Solves</span>
+    <span class="w-[13%]">Best Time</span>
+    <span class="w-[13%]">Worst Time</span>
+    <span class="w-[13%]">Average</span>
+    <span class="w-[13%]">Details</span>
   </div>
   <div v-if="props.sessions.length > 10">
     <SessionsListItem v-for="item in Pagination.showItems" :session="sessions[item]" />

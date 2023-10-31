@@ -2,15 +2,12 @@
   <div class="flex justify-between">
     <div @click="showSolveDetails(index - 1)" class="cursor-pointer hover:bg-gray-300 basis-1/2 flex justify-between">
       <div class="font-bold text-indigo-600 text-right w-10">{{ index }}. </div>
-      <div v-if="plus2" class="basis-1/2 text-right"> {{ displaySavedTime(time + 2000) }} </div>
-      <div v-else class="basis-1/2 text-right"> {{ displaySavedTime(time) }} </div>
+      <div v-if="plus2" class="basis-1/3 text-right"> {{ displaySavedTime(time + 2000) }} </div>
+      <div v-else class="basis-1/3 text-right"> {{ displaySavedTime(time) }} </div>
     </div>
-    <div class="text-gray-500 cursor-pointer ml-2 px-1 hover:text-black hover:font-bold"
-      :class="{ 'font-bold !text-black': plus2 }" @click="emit('plus2', index - 1)"> +2 </div>
-    <div class="text-gray-500 cursor-pointer mx-2 px-1 hover:text-black hover:font-bold"
-      :class="{ 'font-bold !text-black': dnf }" @click="emit('dnf', index - 1)">
+    <div class="text-gray-500 ml-2 px-1" :class="{ 'font-bold !text-black': plus2 }"> +2 </div>
+    <div class="text-gray-500 mx-2 px-1" :class="{ 'font-bold !text-black': dnf }">
       DNF </div>
-    <div class="text-red-700 font-bold cursor-pointer hover:text-black " @click="emit('deleteTime', index - 1)"> X </div>
   </div>
 </template>
 
