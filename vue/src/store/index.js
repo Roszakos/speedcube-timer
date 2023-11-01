@@ -4,7 +4,7 @@ import axiosClient from '../axios.js';
 const store = createStore({
     state: {
         user: {
-            data: {},
+            data: JSON.parse(sessionStorage.getItem('user')),
             token: sessionStorage.getItem('TOKEN')
         },
         session: {
@@ -36,7 +36,6 @@ const store = createStore({
             }
         },
         profile: {
-            user: {},
             sessions: []
         }
     },
@@ -130,16 +129,16 @@ const store = createStore({
         },
         createNewSessionId({commit}) {
             let result = ''
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-                const charactersLength = characters.length
-                let counter = 0
-                while (counter < 22) {
-                    result = result + characters.charAt(Math.floor(Math.random() * charactersLength))
-                    counter = counter + 1
-                }
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            const charactersLength = characters.length
+            let counter = 0
+            while (counter < 22) {
+                result = result + characters.charAt(Math.floor(Math.random() * charactersLength))
+                counter = counter + 1
+            }
 
-                sessionStorage.setItem('SESSION_ID', result)
-                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+            sessionStorage.setItem('SESSION_ID', result)
+            commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
         },
         loadSolves({commit}, sessionHash) {
             return axiosClient.get(`/session/${sessionHash}`)
@@ -169,7 +168,7 @@ const store = createStore({
         updateUser({commit}, userData) {
             return axiosClient.put(`/user`, userData)
                 .then(response => {
-                    commit('setProfileUserData', response.data)
+                    commit('setUser', response.data)
                     return response
                 })
                 .catch(err => {
@@ -196,13 +195,22 @@ const store = createStore({
                 .catch(err => {
                     throw err
                 })
+        },
+        getUserData({commit}, data) {
+            return axiosClient.get(`/user`)
+                .then(response => {
+                    commit('setUser')
+                })
         }
     },
     mutations: {
         setUser: (state, userData) => {
-            state.user.token = userData.token
+            if(userData.token) {
+                state.user.token = userData.token
+                sessionStorage.setItem('TOKEN', userData.token)
+            }
             state.user.data = userData.user
-            sessionStorage.setItem('TOKEN', userData.token)
+            sessionStorage.setItem('user', JSON.stringify(userData.user))
         },
         logout: (state) => {
             state.user.token = null
@@ -219,7 +227,6 @@ const store = createStore({
             state.profile.user = data
         },
         setProfileData: (state, data) => {
-            state.profile.user = data.user
             state.profile.sessions = data.sessions
         }
     },

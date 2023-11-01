@@ -32,11 +32,13 @@ class UserController extends Controller
         }
         if ($request->user()->update($data)) {
             return [
-                'nickname' => $request->user()->nickname,
-                'email' => $request->user()->email,
-                'image' => $request->user()->image ? URL::to($request->user()->image) : null,
-                'first_name' => $request->user()->first_name,
-                'last_name' => $request->user()->last_name,
+                'user' => [
+                    'nickname' => $request->user()->nickname,
+                    'email' => $request->user()->email,
+                    'image' => $request->user()->image ? URL::to($request->user()->image) : null,
+                    'first_name' => $request->user()->first_name,
+                    'last_name' => $request->user()->last_name,
+                ]
             ];
         }
     }
