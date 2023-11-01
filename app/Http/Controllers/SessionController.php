@@ -19,13 +19,6 @@ class SessionController extends Controller
 
     public function getAllSessions(Request $request)
     {
-        $response['user'] = [
-            'nickname' => $request->user()->nickname,
-            'email' => $request->user()->email,
-            'image' => $request->user()->image ? URL::to($request->user()->image) : null,
-            'first_name' => $request->user()->first_name,
-            'last_name' => $request->user()->last_name,
-        ];
         $response['sessions'] = Session::select('hash', 'puzzle', 'id')->where('user_id', $request->user()->id)->orderBy('start_date', 'desc')->get();
         foreach ($response['sessions'] as $session) {
             $session['times'] = Solve::select('hash', 'time', 'plus2', 'dnf')->where('session_id', $session['id'])->get();

@@ -43,7 +43,13 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         meta: {requiresAuth: true},
-        component: Profile
+        component: Profile,
+        children: [
+            {
+                path: '/profile/:page',
+                component: Profile
+            }
+        ]
     }
 ];
 

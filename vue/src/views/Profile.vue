@@ -18,48 +18,45 @@
           <div class="m-auto">
             <div class="mt-8 w-48  rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-20 focus:outline-none">
               <div class="cursor-pointer block px-4 py-2 text-sm  rounded-t-md  hover:text-black hover:bg-sky-400/90"
-                :class="[Page.currentPage == 'overview' ? 'bg-sky-300' : '']" @click="Page.showOverview()">
+                :class="[route.params.page == 'overview' ? 'bg-sky-300' : '']" @click="router.push('/profile/overview')">
                 Overview
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm hover:text-black hover:bg-sky-400/90"
-                :class="[Page.currentPage == 'sessions' ? 'bg-sky-300' : '']" @click="Page.showSessions()">
+                :class="[route.params.page == 'sessions' ? 'bg-sky-300' : '']" @click="router.push('/profile/sessions')">
                 Sessions
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm  hover:text-black hover:bg-sky-400/90"
-                :class="[Page.currentPage == 'settings' ? 'bg-sky-300' : '']" @click="Page.showSettings()">
+                :class="[route.params.page == 'settings' ? 'bg-sky-300' : '']" @click="router.push('/profile/settings')">
                 Settings
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm  hover:text-black hover:bg-sky-400/90"
-                :class="[Page.currentPage == 'passwordChange' ? 'bg-sky-300' : '']" @click="Page.showPasswordChange()">
+                :class="[route.params.page == 'changePassword' ? 'bg-sky-300' : '']"
+                @click="router.push('/profile/changePassword')">
                 Change password
               </div>
               <div class="cursor-pointer block px-4 py-2 text-sm  rounded-b-md  hover:text-black hover:bg-red-700/80"
-                :class="[Page.currentPage == 'deleteAccount' ? 'bg-red-600' : 'bg-red-500 ']"
-                @click="Page.showDeleteAccount()">
+                :class="[route.params.page == 'deleteAccount' ? 'bg-red-600' : 'bg-red-500 ']"
+                @click="router.push('/profile/deleteAccount')">
                 Delete account
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="basis-3/4 mt-10">
-        <span class="text-4xl font-bold" :class="[Page.currentPage == 'deleteAccount' ? 'text-red-500' : '']">
-          {{ Page.title }}
-        </span>
-        <div v-if="profileData" class="m-auto w-[80%] h-[90%] mt-12 relative">
-          <ProfileOverviewComponent v-if="Page.currentPage == 'overview'" :sessions="profileData.sessions" />
-          <ProfileSessionsComponent v-if="Page.currentPage == 'sessions'" :sessions="profileData.sessions" />
-          <ProfileSettingsComponent v-if="Page.currentPage == 'settings'" :user="profileData.user" />
-          <ProfilePasswordChange v-if="Page.currentPage == 'passwordChange'" />
-          <ProfileAccountDelete v-if="Page.currentPage == 'deleteAccount'" />
-        </div>
+      <div v-if="profileData.sessions" class="w-full h-full">
+        <ProfileOverviewComponent v-if="route.params.page == 'overview'" :sessions="profileData.sessions" />
+        <ProfileSessionsComponent v-if="route.params.page == 'sessions'" :sessions="profileData.sessions" />
+        <ProfileSettingsComponent v-if="route.params.page == 'settings'" :user="profileData.user" />
+        <ProfilePasswordChange v-if="route.params.page == 'changePassword'" />
+        <ProfileAccountDelete v-if="route.params.page == 'deleteAccount'" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { UserIcon } from '@heroicons/vue/24/outline';
 import store from '../store';
 import ProfileOverviewComponent from '../components/profile/ProfileOverviewComponent.vue'
@@ -69,40 +66,54 @@ import ProfilePasswordChange from '../components/profile/ProfilePasswordChange.v
 import ProfileAccountDelete from '../components/profile/ProfileAccountDelete.vue'
 
 
-const profileData = ref(null)
+const profileData = ref({
+  user: computed(() => store.state.user.data),
+  sessions: null
+})
+
+const route = useRoute()
+const router = useRouter()
+
+if (!['overview', 'sessions', 'settings', 'passwordChange', 'accountDelete'].includes(route.params.page)) {
+  router.push('/profile/overview')
+}
 
 store.dispatch('getProfileData')
   .then(() => {
-    profileData.value = store.state.profile
+    profileData.value.sessions = store.state.profile.sessions
   })
 
 changeBgColor()
 
-const Page = ref({
-  currentPage: 'overview',
-  title: 'Overview',
+// const Page = ref({
+//   currentPage: 'overview',
+//   title: 'Overview',
 
-  showOverview: function () {
-    this.currentPage = 'overview'
-    this.title = 'Overview'
-  },
-  showSessions: function () {
-    this.currentPage = 'sessions'
-    this.title = 'Your solving sessions'
-  },
-  showSettings: function () {
-    this.currentPage = 'settings'
-    this.title = 'Account Settings'
-  },
-  showPasswordChange: function () {
-    this.currentPage = 'passwordChange'
-    this.title = 'Change Your Password'
-  },
-  showDeleteAccount: function () {
-    this.currentPage = 'deleteAccount'
-    this.title = 'Delete your account'
-  }
-})
+//   showOverview: function () {
+//     this.currentPage = 'overview'
+//     this.title = 'Overview'
+//     router.push('/profile')
+//   },
+//   showSessions: function () {
+
+//     this.title = 'Your solving sessions'
+//     router.push('/profile/sessions')
+//   },
+//   showSettings: function () {
+//     this.currentPage = 'settings'
+//     this.title = 'Account Settings'
+//     router.push('/profile/settings')
+//   },
+//   showPasswordChange: function () {
+//     this.currentPage = 'passwordChange'
+//     this.title = 'Change Your Password'
+//     router.push('/profile/sessions')
+//   },
+//   showDeleteAccount: function () {
+//     this.currentPage = 'deleteAccount'
+//     this.title = 'Delete your account'
+//   }
+// })
 
 function changeBgColor() {
   document.body.style.backgroundColor = 'rgb(125 211 252 / 0.3)'
@@ -112,5 +123,3 @@ function changeBgColor() {
 </script>
 
 
-
-<style></style>

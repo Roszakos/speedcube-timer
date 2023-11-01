@@ -1,12 +1,19 @@
 
 <template>
-  <OverviewListItem title="TOTAL SOLVES" :data="totalSolves" />
-  <OverviewListItem title="BEST TIME" :data="bestSolve" class="mt-6" />
-  <OverviewListItem title="WORST TIME" :data="worstSolve" class="mt-6" />
-  <OverviewListItem title="AVERAGE TIME" :data="avg" class="mt-6" />
-  <OverviewListItem title="BEST AVERAGE OF 5" :data="avg5" class="mt-6" />
-  <OverviewListItem title="BEST AVERAGE OF 12" :data="avg12" class="mt-6" />
-  <OverviewListItem title="BEST SESSION AVERAGE" :data="sessionAvg" class="mt-6" />
+  <div class="basis-3/4 mt-10 h-full">
+    <span class="text-4xl font-bold">
+      Overview
+    </span>
+    <div class="m-auto w-[80%] h-[90%] mt-12 relative">
+      <OverviewListItem title="TOTAL SOLVES" :data="totalSolves" />
+      <OverviewListItem title="BEST TIME" :data="bestSolve" class="mt-6" />
+      <OverviewListItem title="WORST TIME" :data="worstSolve" class="mt-6" />
+      <OverviewListItem title="AVERAGE TIME" :data="avg" class="mt-6" />
+      <OverviewListItem title="BEST AVERAGE OF 5" :data="avg5" class="mt-6" />
+      <OverviewListItem title="BEST AVERAGE OF 12" :data="avg12" class="mt-6" />
+      <OverviewListItem title="BEST SESSION AVERAGE" :data="sessionAvg" class="mt-6" />
+    </div>
+  </div>
 </template>
 
 <script setup>

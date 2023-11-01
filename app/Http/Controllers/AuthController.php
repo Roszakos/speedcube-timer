@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
@@ -41,9 +42,10 @@ class AuthController extends Controller
 
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
-
+        $userdata = User::select('nickname', 'email', 'first_name', 'last_name', 'image')->where('id', $user->id)->first();
+        $userdata['image'] = $userdata['image'] ? URL::to($userdata['image']) : null;
         return response([
-            'user' => $user,
+            'user' => $userdata,
             'token' => $token
         ]);
     }
