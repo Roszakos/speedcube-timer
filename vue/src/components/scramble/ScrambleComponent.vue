@@ -1,7 +1,7 @@
 
 <template>
   <div @click="generateNewScramble"
-    class="text-1xl text-center cursor-pointer mt-6 lg:text-2xl md:text-xl font-semibold select-none">
+    class="text-center cursor-pointer mt-6 lg:text-4xl md:text-3xl text-2xl font-semibold select-none">
     {{ scramble }}
   </div>
 </template>

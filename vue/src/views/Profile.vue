@@ -1,6 +1,10 @@
 
 <template>
-  <div class="max-w-screen-2xl w-[70%] m-auto mt-24 h-[50rem] text-center bg-white">
+  <div class="max-w-screen-2xl w-[70%] m-auto mt-24 h-[50rem] text-center bg-white relative">
+    <!-- <div class="absolute top-[-40px] left-0 bg-white flex items-center p-2">
+      <ArrowLeftIcon class="w-8 h-8 pr-2 m-auto" />
+      <span class="text-xl font-semibold">Go back</span>
+    </div> -->
     <div class="flex py-12 h-full">
       <div class="border-r-2 h-full basis-[28%] pl-12 pr-6">
         <div class="grid grid-cols-1 items-center mt-32">
@@ -57,7 +61,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { UserIcon } from '@heroicons/vue/24/outline';
+import { UserIcon, ArrowLeftIcon } from '@heroicons/vue/24/outline';
 import store from '../store';
 import ProfileOverviewComponent from '../components/profile/ProfileOverviewComponent.vue'
 import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue'
@@ -85,38 +89,10 @@ store.dispatch('getProfileData')
 
 changeBgColor()
 
-// const Page = ref({
-//   currentPage: 'overview',
-//   title: 'Overview',
 
-//   showOverview: function () {
-//     this.currentPage = 'overview'
-//     this.title = 'Overview'
-//     router.push('/profile')
-//   },
-//   showSessions: function () {
-
-//     this.title = 'Your solving sessions'
-//     router.push('/profile/sessions')
-//   },
-//   showSettings: function () {
-//     this.currentPage = 'settings'
-//     this.title = 'Account Settings'
-//     router.push('/profile/settings')
-//   },
-//   showPasswordChange: function () {
-//     this.currentPage = 'passwordChange'
-//     this.title = 'Change Your Password'
-//     router.push('/profile/sessions')
-//   },
-//   showDeleteAccount: function () {
-//     this.currentPage = 'deleteAccount'
-//     this.title = 'Delete your account'
-//   }
-// })
 
 function changeBgColor() {
-  document.body.style.backgroundColor = 'rgb(125 211 252 / 0.3)'
+  document.body.style.backgroundColor = 'rgb(224, 200, 141, 0.8)'
 }
 
 

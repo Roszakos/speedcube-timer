@@ -1,9 +1,10 @@
 <template>
   <div class="flex justify-between">
     <div @click="showSolveDetails(index - 1)" class="cursor-pointer hover:bg-gray-300 basis-1/2 flex justify-between">
-      <div class="font-bold text-indigo-600 text-right w-10">{{ index }}. </div>
-      <div v-if="plus2" class="basis-1/2 text-right"> {{ displaySavedTime(time + 2000) }} </div>
-      <div v-else class="basis-1/2 text-right"> {{ displaySavedTime(time) }} </div>
+      <div class=" text-gray-600/70 text-right w-10">{{ index }}. </div>
+      <div v-if="plus2" class="basis-1/2 text-right font-semibold tabular-nums"> {{ displaySavedTime(time + 2000) }}
+      </div>
+      <div v-else class="basis-1/2 text-right font-semibold tabular-nums"> {{ displaySavedTime(time) }} </div>
     </div>
     <div class="text-gray-500 cursor-pointer ml-2 px-1 hover:text-black hover:font-bold"
       :class="{ 'font-bold !text-black': plus2 }" @click="emit('plus2', index - 1)"> +2 </div>
@@ -15,6 +16,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps({
   index: Number,
   time: Number,
@@ -22,9 +24,11 @@ const props = defineProps({
   plus2: Number | Boolean,
   dnf: Number | Boolean
 })
+
 const emit = defineEmits(["plus2", "dnf", "deleteTime", "updateSolve", "showSolveDetails"])
 
 function displaySavedTime(miliseconds) {
+
   let secondColon = ''
   let firstColon = ''
 
@@ -42,6 +46,8 @@ function displaySavedTime(miliseconds) {
   if (hours) {
     firstColon = ':'
   }
+
+
 
   return hours + firstColon + minutes + secondColon + seconds
 }

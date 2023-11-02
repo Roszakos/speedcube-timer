@@ -1,15 +1,15 @@
 
 <template>
   <GlobalEvents @keydown.space="handleSpaceDown" @keyup.space="handleSpaceUp" />
-  <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-10 pb-20 cursor-pointer">
-    <span class="text-5xl lg:text-8xl md:text-6xl font-sans select-none"
-      :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer }">
-      <span id="hours" v-if="hours" class="px-4">{{ hours }}</span>
+  <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-10 pb-20 cursor-pointer"
+    :class="[nowSolving ? 'absolute top-[35%] left-0 right-0 ' : '']">
+    <span class="text-7xl lg:text-9xl md:text-8xl font-sans select-none tabular-nums "
+      :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer, 'lg:text-[10rem] md:text-[8rem] text-[6.5rem]': nowSolving }">
+      <span id="hours" v-if="hours" class="px-2">{{ hours }}</span>
       <span id="fC" v-if="firstColon">{{ firstColon }}</span>
-      <span id="minutes" v-if="minutes" class="px-4">{{ minutes }}</span>
+      <span id="minutes" v-if="minutes" class="px-2">{{ minutes }}</span>
       <span id="sC" v-if="secondColon">{{ secondColon }}</span>
-      <span id="seconds" v-if="seconds" class="px-4">{{ seconds }}</span>
-      <span id="basicTime" v-if="basicTime">{{ basicTime }}</span>
+      <span id="seconds" v-if="seconds" class="px-2">{{ seconds }}</span>
 
     </span>
   </div>
@@ -23,10 +23,9 @@ defineExpose({
   resetTimer
 })
 
-const emit = defineEmits(['saveTime', 'generateNewScramble'])
+const emit = defineEmits(['saveTime', 'generateNewScramble', 'timerStarted'])
 
-let basicTime = ref(null)
-let seconds = ref('0.00')
+let seconds = ref((0).toFixed(2))
 let minutes = ref(null)
 let hours = ref(null)
 let firstColon = ref(null)
@@ -110,14 +109,16 @@ function handleMouseUp() {
 
 function startSolve() {
   if (!nowSolving.value) {
+    emit('timerStarted')
+
     preparationStart = 0
+
     // Clear all displayed variables
-    basicTime.value = null
     hours.value = null
     minutes.value = null
     firstColon.value = null
     secondColon.value = null
-    seconds.value = 0
+    seconds.value = (0).toFixed(2)
 
     // Update solving status
     nowSolving.value = true

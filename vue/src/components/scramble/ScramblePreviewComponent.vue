@@ -1,37 +1,50 @@
 
 <template>
-  <div class=" bg-gray-200 rounded-r-[20px] lg:col-span-2 md:col-span-2 sm:col-span-1">
-    <span class="px-2 py-2 font-semibold text-xl text-indigo-800">Scramble</span>
-    <div id="cube" class="grid grid-cols-4 grid-rows-3 text-center justify-center items-center w-2/3 mx-auto py-6">
-      <div id="upperFace" class="grid col-span-1 col-start-2 grid-cols-3 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.B1.y" :tE="Cube.Edges.B1.y" :rTC="Cube.Corners.B2.y"
-          :lE="Cube.Edges.M1.y" :center="Centers.upperFace" :rE="Cube.Edges.M2.y" :lDC="Cube.Corners.F1.y"
-          :dE="Cube.Edges.F1.y" :rDC="Cube.Corners.F2.y" />
+  <div class="bg-gray-200 min-h-[20rem]">
+    <span
+      class="px-2 pt-2 font-semibold text-xl text-indigo-800 w-[90%] mx-[5%] inline-block border-b-2 border-gray-400">Scramble</span>
+    <div v-if="!sessionLoading" class="w-full h-[90%] flex items-center justify-center">
+      <div id="cube" class="grid grid-cols-4 grid-rows-3 text-center justify-center items-center w-2/3 mx-auto py-6">
+        <div id="upperFace" class="grid col-span-1 col-start-2 grid-cols-3 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.B1.y" :tE="Cube.Edges.B1.y" :rTC="Cube.Corners.B2.y"
+            :lE="Cube.Edges.M1.y" :center="Centers.upperFace" :rE="Cube.Edges.M2.y" :lDC="Cube.Corners.F1.y"
+            :dE="Cube.Edges.F1.y" :rDC="Cube.Corners.F2.y" />
+        </div>
+        <div id="leftFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.B1.x" :tE="Cube.Edges.M1.x" :rTC="Cube.Corners.F1.x"
+            :lE="Cube.Edges.B4.x" :center='Centers.leftFace' :rE="Cube.Edges.F4.x" :lDC="Cube.Corners.B3.x"
+            :dE="Cube.Edges.M4.x" :rDC="Cube.Corners.F3.x" />
+        </div>
+        <div id="frontFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.F1.z" :tE="Cube.Edges.F1.z" :rTC="Cube.Corners.F2.z"
+            :lE="Cube.Edges.F4.z" :center='Centers.frontFace' :rE="Cube.Edges.F2.z" :lDC="Cube.Corners.F3.z"
+            :dE="Cube.Edges.F3.z" :rDC="Cube.Corners.F4.z" />
+        </div>
+        <div id="rightFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.F2.x" :tE="Cube.Edges.M2.x" :rTC="Cube.Corners.B2.x"
+            :lE="Cube.Edges.F2.x" :center='Centers.rightFace' :rE="Cube.Edges.B2.x" :lDC="Cube.Corners.F4.x"
+            :dE="Cube.Edges.M3.x" :rDC="Cube.Corners.B4.x" />
+        </div>
+        <div id="backFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.B2.z" :tE="Cube.Edges.B1.z" :rTC="Cube.Corners.B1.z"
+            :lE="Cube.Edges.B2.z" :center='Centers.backFace' :rE="Cube.Edges.B4.z" :lDC="Cube.Corners.B4.z"
+            :dE="Cube.Edges.B3.z" :rDC="Cube.Corners.B3.z" />
+        </div>
+        <div id="downFace" class="grid col-span-1 col-start-2 grid-cols-3 grid-rows-3 aspect-square">
+          <ScrambleFaceComponent :lTC="Cube.Corners.F3.y" :tE="Cube.Edges.F3.y" :rTC="Cube.Corners.F4.y"
+            :lE="Cube.Edges.M4.y" :center='Centers.downFace' :rE="Cube.Edges.M3.y" :lDC="Cube.Corners.B3.y"
+            :dE="Cube.Edges.B3.y" :rDC="Cube.Corners.B4.y" />
+        </div>
       </div>
-      <div id="leftFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.B1.x" :tE="Cube.Edges.M1.x" :rTC="Cube.Corners.F1.x"
-          :lE="Cube.Edges.B4.x" :center='Centers.leftFace' :rE="Cube.Edges.F4.x" :lDC="Cube.Corners.B3.x"
-          :dE="Cube.Edges.M4.x" :rDC="Cube.Corners.F3.x" />
-      </div>
-      <div id="frontFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.F1.z" :tE="Cube.Edges.F1.z" :rTC="Cube.Corners.F2.z"
-          :lE="Cube.Edges.F4.z" :center='Centers.frontFace' :rE="Cube.Edges.F2.z" :lDC="Cube.Corners.F3.z"
-          :dE="Cube.Edges.F3.z" :rDC="Cube.Corners.F4.z" />
-      </div>
-      <div id="rightFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.F2.x" :tE="Cube.Edges.M2.x" :rTC="Cube.Corners.B2.x"
-          :lE="Cube.Edges.F2.x" :center='Centers.rightFace' :rE="Cube.Edges.B2.x" :lDC="Cube.Corners.F4.x"
-          :dE="Cube.Edges.M3.x" :rDC="Cube.Corners.B4.x" />
-      </div>
-      <div id="backFace" class="grid col-span-1 grid-cols-3 row-start-2 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.B2.z" :tE="Cube.Edges.B1.z" :rTC="Cube.Corners.B1.z"
-          :lE="Cube.Edges.B2.z" :center='Centers.backFace' :rE="Cube.Edges.B4.z" :lDC="Cube.Corners.B4.z"
-          :dE="Cube.Edges.B3.z" :rDC="Cube.Corners.B3.z" />
-      </div>
-      <div id="downFace" class="grid col-span-1 col-start-2 grid-cols-3 grid-rows-3 aspect-square">
-        <ScrambleFaceComponent :lTC="Cube.Corners.F3.y" :tE="Cube.Edges.F3.y" :rTC="Cube.Corners.F4.y"
-          :lE="Cube.Edges.M4.y" :center='Centers.downFace' :rE="Cube.Edges.M3.y" :lDC="Cube.Corners.B3.y"
-          :dE="Cube.Edges.B3.y" :rDC="Cube.Corners.B4.y" />
+    </div>
+    <div v-else class="flex items-center justify-center flex-col h-[80%] w-full">
+      <div class="animate-spin">
+        <svg class="w-10 h-10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+          <path
+            d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+            class="spinner_z9k8" />
+        </svg>
       </div>
     </div>
   </div>
@@ -39,12 +52,14 @@
 
 <script setup>
 import store from '../../store';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ScrambleFaceComponent from './ScrambleFaceComponent.vue';
 
 defineExpose({
   generateCubeStructure
 })
+
+const sessionLoading = computed(() => store.state.session.loading)
 
 const Rules = {
   R: {
@@ -207,7 +222,7 @@ const Centers = {
   downFace: 'bg-yellow-400'
 }
 
-generateCubeStructure(Cube.value)
+generateCubeStructure()
 
 function generateCubeStructure() {
   let scramble = store.state.currentSolve.scramble.split(' ')

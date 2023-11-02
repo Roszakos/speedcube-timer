@@ -8,6 +8,7 @@ const store = createStore({
             token: sessionStorage.getItem('TOKEN')
         },
         session: {
+            loading: false,
             hash: null,
             puzzle: '3x3',
             times: []
@@ -141,17 +142,21 @@ const store = createStore({
             commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
         },
         loadSolves({commit}, sessionHash) {
+            commit('setSessionLoading', true)
             return axiosClient.get(`/session/${sessionHash}`)
                 .then(response => {
                     if(response.data) {
                         commit('setSolves', response.data)
+                        commit('setSessionLoading', false)
                         return true
                     } else {
                         commit('setSolves', [])
+                        commit('setSessionLoading', false)
                         return false
                     }
                 })
                 .catch(err => {
+                    commit('setSessionLoading', false)
                     throw err
                 })
         },
@@ -228,6 +233,9 @@ const store = createStore({
         },
         setProfileData: (state, data) => {
             state.profile.sessions = data.sessions
+        },
+        setSessionLoading: (state, status) => {
+            state.session.loading = status
         }
     },
     getters: {},

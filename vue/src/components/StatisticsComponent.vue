@@ -1,35 +1,48 @@
 
 <template>
-  <div class=" bg-gray-200 col-span-1">
-    <span class="px-2 py-2 font-semibold text-xl text-indigo-800">Statistics</span>
-    <div class="ml-3 text-indigo-600 font-semibold">
-      <div class="flex flex-row">
-        <span class="w-1/3 mr-5 text-right"> Best: </span>
-        <span v-html="bestSolve"></span>
+  <div class=" bg-gray-200 pb-3 select-none min-h-[20rem]">
+    <span
+      class="mx-[5%] pt-2 font-semibold text-xl inline-block text-indigo-800 border-b-2 border-gray-400 w-[90%]">Statistics</span>
+    <div v-if="!sessionLoading" class="mx-[5%] text-indigo-600 font-semibold w-[90%] mt-2">
+      <div class="flex flex-row hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Best </span>
+        <span v-html="bestSolve" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row">
-        <span class="w-1/3 mr-5 text-right"> Worst: </span>
-        <span v-html="worstSolve"></span>
+      <div class="flex flex-row hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Worst </span>
+        <span v-html="worstSolve" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row">
-        <span class="w-1/3 mr-5 text-right"> Average: </span>
-        <span v-html="showAverage"></span>
+      <div class="flex flex-row hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Average </span>
+        <span v-html="showAverage" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row mt-2">
-        <span class="w-1/3 mr-5 text-right"> Avg5: </span>
-        <span v-html="showAvg5"></span>
+      <div class="w-full border-b-[1px] border-gray-600/50 my-3"></div>
+      <div class="flex flex-row mt-2 hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class=" w-[45%] text-right"> Avg5 </span>
+        <span v-html="showAvg5" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row">
-        <span class="w-1/3 mr-5 text-right"> BestAvg5: </span>
-        <span v-html="showBestAvg5"></span>
+      <div class="flex flex-row hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Best Avg5 </span>
+        <span v-html="showBestAvg5" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row mt-2">
-        <span class="w-1/3 mr-5 text-right"> Avg12: </span>
-        <span v-html="showAvg12"></span>
+      <div class="w-full border-b-[1px] border-gray-600/50 my-3"></div>
+      <div class="flex flex-row mt-2 hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Avg12 </span>
+        <span v-html="showAvg12" class="text-right w-2/3 tabular-nums"></span>
       </div>
-      <div class="flex flex-row">
-        <span class="w-1/3 mr-5 text-right"> BestAvg12: </span>
-        <span v-html="showBestAvg12"></span>
+      <div class="flex flex-row hover:bg-gradient-to-b from-gray-200/50 to-slate-400/50">
+        <span class="w-[45%] text-right"> Best Avg12 </span>
+        <span v-html="showBestAvg12" class="text-right w-2/3 tabular-nums"></span>
+      </div>
+    </div>
+    <div v-else class="flex items-center justify-center flex-col h-[80%] w-full">
+      <div class="animate-spin">
+        <svg class="w-10 h-10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+          <path
+            d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+            class="spinner_z9k8" />
+        </svg>
       </div>
     </div>
   </div>
@@ -42,6 +55,7 @@ import { computed, ref } from 'vue'
 defineExpose({ calculateStats })
 
 const times = computed(() => store.state.session.times)
+const sessionLoading = computed(() => store.state.session.loading)
 
 let bestSolve = ref(null)
 let worstSolve = ref(null)
