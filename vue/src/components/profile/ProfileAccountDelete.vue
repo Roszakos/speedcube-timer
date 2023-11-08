@@ -1,6 +1,6 @@
 
 <template>
-  <div class="basis-3/4 mt-10 h-full">
+  <div class="basis-3/4 lg:mt-10 h-full">
     <span class="text-4xl font-bold">
       Overview
     </span>

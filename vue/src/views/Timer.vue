@@ -48,11 +48,11 @@
                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sessions</router-link>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                    <router-link to="/profile/settings" class="cursor-pointer"
+                    <router-link to="/profile/settings" class="cursor-pointer border-b-2"
                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</router-link>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                    <a @click="logout" class="cursor-pointer"
+                    <a @click="logout" class="cursor-pointer font-semibold"
                       :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
                     </MenuItem>
                   </MenuItems>
