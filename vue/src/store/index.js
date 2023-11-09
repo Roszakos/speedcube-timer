@@ -157,6 +157,10 @@ const store = createStore({
                 })
                 .catch(err => {
                     commit('setSessionLoading', false)
+                    if (err.response.status === 401) {
+                        commit('logout')
+                        return 401
+                    }
                     throw err
                 })
         },
@@ -167,6 +171,10 @@ const store = createStore({
                     return response
                 })
                 .catch(err => {
+                    if (err.response.status === 401) {
+                        commit('logout')
+                        return 401
+                    }
                     throw err
                 })
         },

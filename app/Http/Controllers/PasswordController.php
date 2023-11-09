@@ -21,8 +21,12 @@ class PasswordController extends Controller
 
         if (!password_verify($data['currentPassword'], $request->user()->password)) {
             return response([
-                'error' => 'Wrong password'
-            ]);
+                'errors' => [
+                    'password' => [
+                        'Current password is not correct.'
+                    ]
+                ]
+            ], 422);
         }
         return $request->user()->update(['password' => bcrypt($data['newPassword'])]);
     }

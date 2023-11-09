@@ -13,10 +13,10 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'nickname' => 'required|string',
+            'nickname' => 'required|string|min:3|max:24',
             'email' => 'email|required|string',
-            'first_name' => 'string|nullable',
-            'last_name' => 'string|nullable',
+            'first_name' => 'string|nullable|min:2|max:24',
+            'last_name' => 'string|nullable|min:2|max:24',
             'image' => 'nullable|string'
         ]);
 
@@ -65,8 +65,12 @@ class UserController extends Controller
             }
         } else {
             return response([
-                'error' => 'Wrong password'
-            ]);
+                'errors' => [
+                    'password' => [
+                        'Password is not correct.'
+                    ]
+                ]
+            ], 422);
         }
     }
 

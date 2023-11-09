@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -36,7 +37,11 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response([
-                'error' => 'Provided credentials are not correct'
+                'errors' => [
+                    'credentials' => [
+                        'Provided credentials are not correct'
+                    ]
+                ]
             ], 422);
         }
 
@@ -50,7 +55,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         $user = Auth::user();
 
@@ -64,7 +69,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'nickname' => 'required|string',
+            'nickname' => 'required|string|min:3|max:24',
             'email' => 'email|required|string|unique:users,email',
             'password' => [
                 'required',
@@ -80,6 +85,8 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
+
+        event(new Registered($user));
 
         return response([
             'user' => $user,

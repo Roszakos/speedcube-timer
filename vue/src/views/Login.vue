@@ -6,6 +6,15 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div class="bg-red-500 font-semibold px-4 py-4 rounded-md mb-3" v-if="errors.length">
+      <div class="w-full flex flex-row-reverse pt-1 pr-1">
+        <XCircleIcon class="w-6 h-6 cursor-pointer" @click="hideErrors" />
+      </div>
+      <div v-for="(error, index) in errors" :key="index">
+        <span>&#x2022 {{ error }}</span>
+      </div>
+    </div>
+
     <form class="space-y-6" @submit.prevent="login">
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Nickname or Email address</label>
@@ -58,9 +67,12 @@
 import { useStore } from "vuex"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
+import { XCircleIcon } from "@heroicons/vue/24/outline";
 
 const store = useStore()
 const router = useRouter()
+
+const errors = ref([])
 
 const data = ref({
   emailOrNick: '',
@@ -79,8 +91,18 @@ function login() {
       })
     })
     .catch(err => {
+      errors.value = []
+      Object.keys(err.response.data.errors).forEach((attribute) => {
+        err.response.data.errors[attribute].forEach((error) => {
+          errors.value.push(error)
+        })
+      })
       loading.value = false
     })
+}
+
+function hideErrors() {
+  errors.value = []
 }
 
 </script>

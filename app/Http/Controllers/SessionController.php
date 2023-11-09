@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Solve;
 use App\Models\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
 class SessionController extends Controller
 {

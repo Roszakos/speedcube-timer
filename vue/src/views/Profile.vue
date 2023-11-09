@@ -108,8 +108,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { UserIcon, ArrowLeftIcon, ArrowUturnLeftIcon, ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/outline';
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { UserIcon, ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/outline';
+import { Disclosure } from '@headlessui/vue'
 import store from '../store';
 import ProfileOverviewComponent from '../components/profile/ProfileOverviewComponent.vue'
 import ProfileSessionsComponent from '../components/profile/ProfileSessionsComponent.vue'
@@ -131,7 +131,10 @@ if (!['overview', 'sessions', 'settings', 'passwordChange', 'accountDelete'].inc
 }
 
 store.dispatch('getProfileData')
-  .then(() => {
+  .then((response) => {
+    if (response === 401) {
+      router.go('/login')
+    }
     profileData.value.sessions = store.state.profile.sessions
   })
 

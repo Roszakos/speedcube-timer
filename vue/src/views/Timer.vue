@@ -155,7 +155,9 @@ changeBgColor()
 
 store.dispatch('loadSolves', sessionHash)
   .then((response) => {
-    if (response) {
+    if (response === 401) {
+      router.go('/login')
+    } else if (response) {
       showModal.value = true
     }
     updateStats()

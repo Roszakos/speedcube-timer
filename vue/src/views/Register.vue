@@ -6,6 +6,15 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div class="bg-red-500 font-semibold px-4 py-4 rounded-md mb-3" v-if="errors.length">
+      <div class="w-full flex flex-row-reverse pt-1 pr-1">
+        <XCircleIcon class="w-6 h-6 cursor-pointer" @click="hideErrors" />
+      </div>
+      <div v-for="(error, index) in errors" :key="index">
+        <span>&#x2022 {{ error }}</span>
+      </div>
+    </div>
+
     <form class="space-y-6" @submit.prevent="register()">
       <div>
         <div class="flex items-center justify-between">
@@ -13,7 +22,6 @@
         </div>
         <div class="mt-2">
           <input id="nickname" name="nickname" type="text" autocomplete="current-nickname" v-model="data.nickname"
-            required
             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         </div>
       </div>
@@ -21,7 +29,7 @@
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
-          <input id="email" name="email" type="email" autocomplete="email" v-model="data.email" required
+          <input id="email" name="email" type="email" autocomplete="email" v-model="data.email"
             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         </div>
       </div>
@@ -32,7 +40,6 @@
         </div>
         <div class="mt-2">
           <input id="password" name="password" type="password" autocomplete="current-password" v-model="data.password"
-            required
             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         </div>
       </div>
@@ -44,7 +51,7 @@
         </div>
         <div class="mt-2">
           <input id="password_confirmation" name="password_confirmation" type="password"
-            v-model="data.password_confirmation" autocomplete="current-password_confirmation" required
+            v-model="data.password_confirmation" autocomplete="current-password_confirmation"
             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
         </div>
       </div>
@@ -76,9 +83,12 @@
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
+import { XCircleIcon } from '@heroicons/vue/24/outline';
 
 const store = useStore()
 const router = useRouter()
+
+const errors = ref([])
 
 const loading = ref(false)
 
@@ -99,8 +109,18 @@ function register() {
       })
     })
     .catch(err => {
+      errors.value = []
+      Object.keys(err.response.data.errors).forEach((attribute) => {
+        err.response.data.errors[attribute].forEach((error) => {
+          errors.value.push(error)
+        })
+      })
       loading.value = false
     })
+}
+
+function hideErrors() {
+  errors.value = []
 }
 </script>
 

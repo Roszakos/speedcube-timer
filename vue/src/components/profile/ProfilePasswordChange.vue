@@ -24,6 +24,9 @@
           </button>
         </div>
       </form>
+      <div v-if="errors.length" class="border-red-600 border-4 bg-red-400 font-bold text-md py-2 mt-4 rounded-md">
+        {{ errors[0] }}
+      </div>
     </div>
   </div>
 </template>
@@ -38,8 +41,18 @@ let data = ref({
   newPassword_confirmation: null
 })
 
+const errors = ref([])
+
 function changePassword() {
+  errors.value = []
   store.dispatch('changePassword', data.value)
+    .catch(err => {
+      Object.keys(err.response.data.errors).forEach((attribute) => {
+        err.response.data.errors[attribute].forEach((error) => {
+          errors.value.push(error)
+        })
+      })
+    })
 }
 </script>
 

@@ -17,6 +17,9 @@
           </button>
         </div>
       </form>
+      <div v-if="errors.length" class="border-red-600 border-4 bg-red-400 font-bold text-md py-2 mt-4 rounded-md">
+        {{ errors[0] }}
+      </div>
       <span class="text-red-500 font-bold text-md absolute bottom-9 left-0 right-0 text-center italic">
         Note: this action can't be undone
       </span>
@@ -32,11 +35,14 @@ import store from '../../store';
 let password = ref(null)
 let showDeleteConfirmation = ref(false)
 
+const errors = ref([])
+
 function deleteAccount() {
   showDeleteConfirmation.value = true
 }
 
 function deleteAccountConfirmed(decision) {
+  errors.value = []
   if (decision == 'delete') {
     showDeleteConfirmation.value = false
     store.dispatch('deleteAccount', { password: password.value })
@@ -44,6 +50,13 @@ function deleteAccountConfirmed(decision) {
         if (response == 1) {
           router.push('/login')
         }
+      })
+      .catch(err => {
+        Object.keys(err.response.data.errors).forEach((attribute) => {
+          err.response.data.errors[attribute].forEach((error) => {
+            errors.value.push(error)
+          })
+        })
       })
   } else if (decision == 'cancel') {
     showDeleteConfirmation.value = false
