@@ -130,6 +130,8 @@ if (!['overview', 'sessions', 'settings', 'passwordChange', 'accountDelete'].inc
   router.push('/profile/overview')
 }
 
+changeBgColor()
+
 store.dispatch('getProfileData')
   .then((response) => {
     if (response === 401) {
@@ -138,15 +140,10 @@ store.dispatch('getProfileData')
     profileData.value.sessions = store.state.profile.sessions
   })
 
-changeBgColor()
-
-
-
 function changeBgColor() {
-  document.body.style.backgroundColor = 'rgb(224, 200, 141, 0.8)'
+  document.body.style.backgroundColor = 'white'
 }
 
 
 </script>
-
 

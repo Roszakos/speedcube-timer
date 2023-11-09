@@ -81,6 +81,8 @@ const data = ref({
 
 const loading = ref(false)
 
+changeBgColor()
+
 function login() {
   loading.value = true
   store.dispatch('login', data.value)
@@ -103,6 +105,10 @@ function login() {
 
 function hideErrors() {
   errors.value = []
+}
+
+function changeBgColor() {
+  document.body.style.backgroundColor = 'rgb(224, 200, 141)'
 }
 
 </script>

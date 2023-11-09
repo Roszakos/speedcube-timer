@@ -146,12 +146,12 @@ const timesListComponent = ref(null)
 
 const showModal = ref(false)
 
+changeBgColor()
+
 store.dispatch('getSessionId')
 
 let sessionHash = store.state.session.hash
 let isTimerStarted = ref(false)
-
-changeBgColor()
 
 store.dispatch('loadSolves', sessionHash)
   .then((response) => {
@@ -162,11 +162,6 @@ store.dispatch('loadSolves', sessionHash)
     }
     updateStats()
   })
-
-
-function changeBgColor() {
-  document.body.style.backgroundColor = 'rgb(224, 200, 141)'
-}
 
 function changeTimerStatus() {
   isTimerStarted.value = true
@@ -236,6 +231,10 @@ function closeModal(decision) {
 
 function showSolveDetails(index) {
   solveDetailsModal.value.showSolveDetails(index)
+}
+
+function changeBgColor() {
+  document.body.style.backgroundColor = 'rgb(224, 200, 141)'
 }
 
 

@@ -99,13 +99,15 @@ const data = ref({
   password_confirmation: ''
 })
 
+changeBgColor()
+
 function register() {
   loading.value = true
   store.dispatch('register', data.value)
     .then(() => {
       loading.value = false
       router.push({
-        name: 'Timer'
+        name: 'EmailVerify'
       })
     })
     .catch(err => {
@@ -121,6 +123,10 @@ function register() {
 
 function hideErrors() {
   errors.value = []
+}
+
+function changeBgColor() {
+  document.body.style.backgroundColor = 'rgb(224, 200, 141)'
 }
 </script>
 
