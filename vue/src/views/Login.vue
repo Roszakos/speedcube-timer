@@ -91,6 +91,14 @@ if (store.state.flashData.accountDeleted) {
   store.state.flashData.accountDeleted = false
 }
 
+if (store.state.flashData.loggedOut) {
+  store.commit('notify', {
+    type: '',
+    message: 'You have been logged out'
+  })
+  store.state.flashData.loggedOut = false
+}
+
 changeBgColor()
 
 function login() {

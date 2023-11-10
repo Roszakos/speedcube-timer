@@ -201,11 +201,13 @@ function saveTime() {
   updateStats()
   store.dispatch("saveSolve", { time: time, scramble: scramble })
     .then(response => {
-      store.state.session.times[store.state.session.times.length - 1].hash = response.data
-      store.commit('notify', {
-        type: 'success',
-        message: 'Time was saved in database'
-      })
+      if (response.status === 200) {
+        store.state.session.times[store.state.session.times.length - 1].hash = response.data
+        store.commit('notify', {
+          type: 'success',
+          message: 'Time was saved in database'
+        })
+      }
     })
 }
 
