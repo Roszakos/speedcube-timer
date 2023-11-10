@@ -67,8 +67,9 @@
       <div v-if="profileData.sessions" class="w-full h-full">
         <ProfileOverviewComponent v-if="route.params.page == 'overview'" :sessions="profileData.sessions" />
         <ProfileSessionsComponent v-if="route.params.page == 'sessions'" :sessions="profileData.sessions" />
-        <ProfileSettingsComponent v-if="route.params.page == 'settings'" :user="profileData.user" />
-        <ProfilePasswordChange v-if="route.params.page == 'changePassword'" />
+        <ProfileSettingsComponent v-if="route.params.page == 'settings'" :user="profileData.user"
+          @notify="showNotification" />
+        <ProfilePasswordChange v-if="route.params.page == 'changePassword'" @notify="showNotification" />
         <ProfileAccountDelete v-if="route.params.page == 'deleteAccount'" />
       </div>
     </div>
@@ -103,6 +104,7 @@
       </div>
     </div>
   </div>
+  <Notification />
 </template>
 
 <script setup>
@@ -116,6 +118,7 @@ import ProfileSessionsComponent from '../components/profile/ProfileSessionsCompo
 import ProfileSettingsComponent from '../components/profile/ProfileSettingsComponent.vue'
 import ProfilePasswordChange from '../components/profile/ProfilePasswordChange.vue'
 import ProfileAccountDelete from '../components/profile/ProfileAccountDelete.vue'
+import Notification from '../components/Notification.vue';
 
 
 const profileData = ref({
@@ -125,6 +128,9 @@ const profileData = ref({
 
 const route = useRoute()
 const router = useRouter()
+
+console.log(route.params)
+console.log(route.query)
 
 if (!['overview', 'sessions', 'settings', 'passwordChange', 'accountDelete'].includes(route.params.page)) {
   router.push('/profile/overview')
@@ -139,6 +145,13 @@ store.dispatch('getProfileData')
     }
     profileData.value.sessions = store.state.profile.sessions
   })
+
+function showNotification(message) {
+  store.commit('notify', {
+    type: 'success',
+    message: message
+  })
+}
 
 function changeBgColor() {
   document.body.style.backgroundColor = 'white'

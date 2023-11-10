@@ -46,14 +46,16 @@ const props = defineProps({
   user: Object
 })
 
+const emit = defineEmits(['notify'])
+
 const errors = ref([])
 
 let userModel = ref({
   nickname: props.user.nickname,
   email: props.user.email,
-  first_name: props.user.first_name,
-  last_name: props.user.last_name,
-  image: props.user.image
+  first_name: props.user.first_name ?? null,
+  last_name: props.user.last_name ?? null,
+  image: props.user.image ?? null
 })
 
 function setNewImage(image) {
@@ -63,6 +65,9 @@ function setNewImage(image) {
 function updateUser() {
   errors.value = []
   store.dispatch('updateUser', userModel.value)
+    .then(() => {
+      emit('notify', 'Data was succesfully updated')
+    })
     .catch(err => {
       Object.keys(err.response.data.errors).forEach((attribute) => {
         err.response.data.errors[attribute].forEach((error) => {

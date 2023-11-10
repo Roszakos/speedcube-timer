@@ -112,8 +112,10 @@
           </button>
         </div>
       </div>
+
     </main>
   </div>
+  <Notification />
 </template>
 
 <script setup>
@@ -129,6 +131,7 @@ import ScrambleComponent from '../components/scramble/ScrambleComponent.vue'
 import TimerComponent from '../components/TimerComponent.vue'
 import SessionContinueModalVue from '../components/modals/SessionContinueModal.vue'
 import SolveDetailsModal from '../components/modals/SolveDetailsModal.vue'
+import Notification from '../components/Notification.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -199,6 +202,10 @@ function saveTime() {
   store.dispatch("saveSolve", { time: time, scramble: scramble })
     .then(response => {
       store.state.session.times[store.state.session.times.length - 1].hash = response.data
+      store.commit('notify', {
+        type: 'success',
+        message: 'Time was saved in database'
+      })
     })
 }
 
@@ -210,6 +217,10 @@ function endSession() {
         .then(() => {
           updateStats()
           timerComponent.value.resetTimer()
+          store.commit('notify', {
+            type: 'success',
+            message: 'Started new solving session'
+          })
         })
     })
 }

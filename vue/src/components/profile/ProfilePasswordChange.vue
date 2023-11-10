@@ -35,6 +35,8 @@
 import { ref } from 'vue'
 import store from '../../store';
 
+const emit = defineEmits(['notify'])
+
 let data = ref({
   currentPassword: null,
   newPassword: null,
@@ -46,6 +48,9 @@ const errors = ref([])
 function changePassword() {
   errors.value = []
   store.dispatch('changePassword', data.value)
+    .then(() => {
+      emit('notify', 'Password was succesfully changed')
+    })
     .catch(err => {
       Object.keys(err.response.data.errors).forEach((attribute) => {
         err.response.data.errors[attribute].forEach((error) => {

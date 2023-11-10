@@ -31,6 +31,9 @@
 import { ref } from 'vue'
 import AccountDeleteConfirmationModal from '../modals/AccountDeleteConfirmationModal.vue';
 import store from '../../store';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 let password = ref(null)
 let showDeleteConfirmation = ref(false)
@@ -47,7 +50,9 @@ function deleteAccountConfirmed(decision) {
     showDeleteConfirmation.value = false
     store.dispatch('deleteAccount', { password: password.value })
       .then(response => {
-        if (response == 1) {
+        if (response.data == 1) {
+          store.commit('logout')
+          store.state.flashData.accountDeleted = true
           router.push('/login')
         }
       })

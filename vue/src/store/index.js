@@ -38,6 +38,14 @@ const store = createStore({
         },
         profile: {
             sessions: []
+        },
+        notification: {
+            show: false,
+            type: null,
+            message: null
+        },
+        flashData: {
+            accountDeleted: false
         }
     },
     actions: {
@@ -200,20 +208,23 @@ const store = createStore({
         deleteAccount({commit}, data) {
             return axiosClient.post(`/user`, data)
                 .then(response => {
-                    if(response == 1) {
-                        commit('logout')
-                        return response
-                    }
+                    return response
                 })
                 .catch(err => {
                     throw err
                 })
         },
-        getUserData({commit}, data) {
+        getUserData({commit}) {
             return axiosClient.get(`/user`)
-                .then(response => {
+                .then(() => {
                     commit('setUser')
                 })
+        },
+        verifyEmail({commit}, url) {
+            return axiosClient.get(url)
+                .then(response => {
+                    return response
+                }) 
         }
     },
     mutations: {
@@ -244,6 +255,14 @@ const store = createStore({
         },
         setSessionLoading: (state, status) => {
             state.session.loading = status
+        },
+        notify: (state, {type, message}) => {
+            state.notification.type = type,
+            state.notification.message = message,
+            state.notification.show = true
+            setTimeout(() => {
+                state.notification.show = false
+            }, 3000)
         }
     },
     getters: {},

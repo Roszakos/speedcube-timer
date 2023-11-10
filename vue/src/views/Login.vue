@@ -60,6 +60,7 @@
       <router-link :to="{ name: 'Register' }" class="text-indigo-700 font-semibold">Sign up for free</router-link>
     </p>
   </div>
+  <Notification />
 </template>
 
 
@@ -68,6 +69,7 @@ import { useStore } from "vuex"
 import { ref } from "vue"
 import { useRouter } from "vue-router";
 import { XCircleIcon } from "@heroicons/vue/24/outline";
+import Notification from "../components/Notification.vue";
 
 const store = useStore()
 const router = useRouter()
@@ -80,6 +82,14 @@ const data = ref({
 })
 
 const loading = ref(false)
+
+if (store.state.flashData.accountDeleted) {
+  store.commit('notify', {
+    type: 'success',
+    message: 'Account was succesfully deleted'
+  })
+  store.state.flashData.accountDeleted = false
+}
 
 changeBgColor()
 
