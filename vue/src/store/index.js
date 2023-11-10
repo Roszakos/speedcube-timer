@@ -4,8 +4,8 @@ import axiosClient from '../axios.js';
 const store = createStore({
     state: {
         user: {
-            data: JSON.parse(sessionStorage.getItem('user')),
-            token: sessionStorage.getItem('TOKEN')
+            data: JSON.parse(localStorage.getItem('user')),
+            token: localStorage.getItem('TOKEN')
         },
         session: {
             loading: false,
@@ -45,7 +45,8 @@ const store = createStore({
             message: null
         },
         flashData: {
-            accountDeleted: false
+            accountDeleted: false,
+            loggedOut: false
         }
     },
     actions: {
@@ -118,8 +119,8 @@ const store = createStore({
                 })
         },
         getSessionId({commit}) {
-            if (sessionStorage.getItem('SESSION_ID')) {
-                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+            if (localStorage.getItem('SESSION_ID')) {
+                commit('setSessionId', localStorage.getItem('SESSION_ID'))
                 return true
             } else {
                 let result = ''
@@ -131,8 +132,8 @@ const store = createStore({
                     counter = counter + 1
                 }
 
-                sessionStorage.setItem('SESSION_ID', result)
-                commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+                localStorage.setItem('SESSION_ID', result)
+                commit('setSessionId', localStorage.getItem('SESSION_ID'))
                 return false
             }
         },
@@ -146,8 +147,8 @@ const store = createStore({
                 counter = counter + 1
             }
 
-            sessionStorage.setItem('SESSION_ID', result)
-            commit('setSessionId', sessionStorage.getItem('SESSION_ID'))
+            localStorage.setItem('SESSION_ID', result)
+            commit('setSessionId', localStorage.getItem('SESSION_ID'))
         },
         loadSolves({commit}, sessionHash) {
             commit('setSessionLoading', true)
@@ -231,15 +232,15 @@ const store = createStore({
         setUser: (state, userData) => {
             if(userData.token) {
                 state.user.token = userData.token
-                sessionStorage.setItem('TOKEN', userData.token)
+                localStorage.setItem('TOKEN', userData.token)
             }
             state.user.data = userData.user
-            sessionStorage.setItem('user', JSON.stringify(userData.user))
+            localStorage.setItem('user', JSON.stringify(userData.user))
         },
         logout: (state) => {
             state.user.token = null
             state.user.data = {}
-            sessionStorage.clear()
+            localStorage.clear()
         },
         setSessionId: (state, sessionHash) => {
             state.session.hash = sessionHash
