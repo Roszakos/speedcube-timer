@@ -21,6 +21,10 @@ axiosClient.interceptors.response.use(response => {
     store.commit('logout')
     router.push({name: 'Login'})
    }
+   if (error.response.status === 403 && !error.response.data.email_verified) {
+        store.state.user.verifyEmail = true;
+        router.push({name: 'Timer'});
+   }
    return error;
  });
 

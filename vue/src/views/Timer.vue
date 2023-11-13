@@ -25,7 +25,9 @@
                     class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span class="absolute -inset-1.5" />
                     <span class="sr-only">Open user menu</span>
-                    <img class="h-8 w-8 rounded-full" :src="user.image" alt="profile_image" />
+                    <img v-if="user.image" class="h-9 w-9 rounded-full ring-1 ring-black" :src="user.image"
+                      alt="profile_image" />
+                    <UserIcon v-else class="h-9 w-9 rounded-full bg-gray-600 ring-1 ring-black" />
                   </MenuButton>
                 </div>
                 <transition enter-active-class="transition ease-out duration-100"
@@ -115,6 +117,13 @@
 
     </main>
   </div>
+  <div v-if="verifyEmail"
+    class="w-full py-1 fixed bottom-0 flex items-center justify-center gap-2 flex-col md:flex-row text-white bg-blue-600">
+    <div class="text-center">Verify your email address so you save your times in database. </div>
+    <div @click="resendEmailVerificationLink" class="underline cursor-pointer font-semibold">
+      Click here to resend verification link.
+    </div>
+  </div>
   <Notification />
 </template>
 
@@ -122,8 +131,9 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
 import { useStore } from "vuex"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useRouter } from "vue-router"
+import { UserIcon } from '@heroicons/vue/24/outline';
 import StatisticsComponent from '../components/StatisticsComponent.vue'
 import TimesComponent from '../components/TimesComponent.vue'
 import ScramblePreviewComponent from '../components/scramble/ScramblePreviewComponent.vue'
@@ -137,6 +147,8 @@ const store = useStore()
 const router = useRouter()
 
 const user = store.state.user.data
+
+const verifyEmail = computed(() => store.state.user.verifyEmail)
 
 
 // Refs for components
@@ -225,6 +237,10 @@ function endSession() {
           })
         })
     })
+}
+
+function resendEmailVerificationLink() {
+  store.dispatch('resendEmailVerificationLink')
 }
 
 function closeModal(decision) {
