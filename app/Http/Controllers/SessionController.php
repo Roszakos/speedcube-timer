@@ -29,6 +29,10 @@ class SessionController extends Controller
             unset($session['id']);
         }
 
+        $response['sessions'] = $response['sessions']->filter(function ($item) {
+            return count($item['times']);
+        })->values();
+
         return $response;
     }
 }
