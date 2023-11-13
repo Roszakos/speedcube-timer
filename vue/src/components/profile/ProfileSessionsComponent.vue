@@ -3,7 +3,7 @@
     <span class="text-4xl font-bold px-2">
       Your Solving Sessions
     </span>
-    <div class="m-auto w-[80%] h-[90%] mt-12 relative">
+    <div v-if="props.sessions.length > 0" class="m-auto w-[80%] h-[90%] mt-12 relative">
       <div class="flex font-bold text-sm px-1 mt-12 justify-between text-left pb-2">
         <span class="w-[30%] lg:w-[23%]">Session hash</span>
         <span class="w-[13%]">Puzzle</span>
@@ -16,10 +16,11 @@
         <SessionsListItem v-for="item in Pagination.showItems" ref="sessListItem" :session="sessions[item]"
           @showNewDetails="showNewDetails" />
       </div>
-      <div v-else id="sessions-container" class=" min-h-[66%]">
+      <div v-else-if="props.sessions.length > 0" id="sessions-container" class=" min-h-[66%]">
         <SessionsListItem v-for="x in props.sessions.length" ref="sessListItem" :session="sessions[x - 1]"
           @showNewDetails="showNewDetails" />
       </div>
+
 
       <!-- Pagination -->
       <div v-if="Pagination.numberOfPages > 1">
@@ -37,21 +38,10 @@
             »
           </div>
         </div>
-        <!-- <div class="flex m-auto w-full absolute bottom-6 h-10 justify-between items-center">
-          <div class="hover:text-sky-500 h-full flex items-center justify-center cursor-pointer p-3 text-2xl"
-            @click="pageChange('previous')">
-            «
-          </div>
-          <span>Showing {{ Pagination.firstShownItem }} - {{ Pagination.lastShownItem }}
-            of {{
-              props.sessions.length }}
-          </span>
-          <div class=" hover:text-sky-500 h-full p-3 text-2xl flex items-center justify-center cursor-pointer"
-            @click="pageChange('next')">
-            »
-          </div>
-        </div> -->
       </div>
+    </div>
+    <div v-else class="mt-20">
+      You don't have any sessions yet.
     </div>
   </div>
 </template>

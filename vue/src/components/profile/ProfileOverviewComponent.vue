@@ -62,17 +62,18 @@ let chartData = {
   datasets: []
 }
 
-const totalSolves = ref(null)
-const bestSolve = ref(null)
-const worstSolve = ref(null)
-const avg = ref(null)
-const avg5 = ref(null)
-const avg12 = ref(null)
-const sessionAvg = ref(null)
+const totalSolves = ref('0')
+const bestSolve = ref('0.00')
+const worstSolve = ref('0.00')
+const avg = ref('0.00')
+const avg5 = ref('0.00')
+const avg12 = ref('0.00')
+const sessionAvg = ref('0.00')
 
 onMounted(() => {
-  startCounting('totalSolves', 35, 2000)
+  startCounting('totalSolves', totalSolves.value, 2000)
 })
+
 
 prepareChartData()
 countSolves()
@@ -107,27 +108,30 @@ function startCounting(elementId, endVal, duration) {
   let interval = 7
   let currentVal = 0
 
+  if (endVal > 0) {
+    const count = setInterval(() => {
+      currentVal = countUp(currentVal, addition)
+      el.innerHTML = Math.floor(currentVal)
 
-  const count = setInterval(() => {
-    currentVal = countUp(currentVal, addition)
-    el.innerHTML = Math.floor(currentVal)
-
-    if (el.innerHTML >= milestones[0]) {
-      if (milestones.length == 1) {
-        addition = 0.035
-      } else if (milestones.length == 2) {
-        addition = 0.8
-      } else {
-        addition = addition / 2
+      if (el.innerHTML >= milestones[0]) {
+        if (milestones.length == 1) {
+          addition = 0.035
+        } else if (milestones.length == 2) {
+          addition = 0.8
+        } else {
+          addition = addition / 2
+        }
+        milestones.shift()
       }
-      milestones.shift()
-    }
 
-    if (el.innerHTML >= endVal) {
-      el.innerHTML = endVal
-      clearInterval(count)
-    }
-  }, interval)
+      if (el.innerHTML >= endVal) {
+        el.innerHTML = endVal
+        clearInterval(count)
+      }
+    }, interval)
+  } else {
+    el.innerHTML = '0'
+  }
 }
 
 
@@ -142,6 +146,8 @@ function countSolves() {
       counter = counter + session.times.length
     })
     totalSolves.value = counter
+  } else {
+    totalSolves.value = '-'
   }
 }
 
@@ -205,6 +211,9 @@ function prepareChartData() {
 
 function bestTime() {
   if (props.sessions.length) {
+    let validSessions = props.sessions.filter((session) => {
+      if (session.times.length) return true
+    })
     let currentTime
     let best = props.sessions[0].times[0].plus2 ? props.sessions[0].times[0].time + 2000 : props.sessions[0].times[0].time
     props.sessions.forEach((session) => {
@@ -213,8 +222,9 @@ function bestTime() {
         best = currentTime < best ? currentTime : best
       })
     })
-    bestSolve.value = displayTime(best)
+    bestSolve.value = displayTime(best) ?? '-'
   }
+
 }
 
 function worstTime() {

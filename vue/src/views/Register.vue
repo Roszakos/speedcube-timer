@@ -107,17 +107,18 @@ function register() {
     .then(() => {
       loading.value = false
       router.push({
-        name: 'EmailVerify'
+        name: 'EmailNotify'
       })
     })
     .catch(err => {
+      loading.value = false
       errors.value = []
       Object.keys(err.response.data.errors).forEach((attribute) => {
         err.response.data.errors[attribute].forEach((error) => {
           errors.value.push(error)
         })
       })
-      loading.value = false
+
     })
 }
 

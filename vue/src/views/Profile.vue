@@ -129,9 +129,6 @@ const profileData = ref({
 const route = useRoute()
 const router = useRouter()
 
-console.log(route.params)
-console.log(route.query)
-
 if (!['overview', 'sessions', 'settings', 'passwordChange', 'accountDelete'].includes(route.params.page)) {
   router.push('/profile/overview')
 }

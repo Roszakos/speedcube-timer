@@ -103,21 +103,17 @@ changeBgColor()
 
 function login() {
   loading.value = true
+  errors.value = []
   store.dispatch('login', data.value)
-    .then(() => {
+    .then((response) => {
       loading.value = false
-      router.push({
-        name: 'Timer'
-      })
-    })
-    .catch(err => {
-      errors.value = []
-      Object.keys(err.response.data.errors).forEach((attribute) => {
-        err.response.data.errors[attribute].forEach((error) => {
-          errors.value.push(error)
+      if (response.status === 200) {
+        router.push({
+          name: 'Timer'
         })
-      })
-      loading.value = false
+      } else if (response.response.status === 422) {
+        errors.value = ['Provided credentials are not correct.']
+      }
     })
 }
 
