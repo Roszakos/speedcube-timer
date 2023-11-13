@@ -89,7 +89,7 @@ class AuthController extends Controller
         event(new Registered($user));
 
         return response([
-            'user' => $user,
+            'user' => $user->only(['nickname', 'email', 'image', 'first_name', 'last_name']),
             'token' => $token
         ]);
     }
