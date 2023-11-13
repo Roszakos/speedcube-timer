@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SolveController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\PasswordController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\PasswordController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -32,7 +33,28 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user', [UserController::class, 'update']);
     Route::post('/user', [UserController::class, 'destroy']);
     Route::put('/password', [PasswordController::class, 'changePassword']);
+
+
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return ['email' => 'sent'];
+    })->middleware('throttle:6,1')->name('verification.send');
 });
+
+Route::get('/email/verify', function () {
+    return response([
+        'email_verified' => false
+    ], 403);
+})->middleware('auth:sanctum')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    //return $request;
+    $request->fulfill();
+
+    return ['success' => true];
+})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
