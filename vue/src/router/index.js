@@ -4,7 +4,9 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import AuthLayout from '../components/AuthLayout.vue'
 import Profile from '../views/Profile.vue'
+import EmailNotify from '../views/EmailNotify.vue'
 import store from '../store'
+import EmailVerify from '../views/EmailVerify.vue'
 
 const routes = [
     {
@@ -50,6 +52,17 @@ const routes = [
                 component: Profile
             }
         ]
+    },
+    {
+        path: '/email/notify/',
+        name: 'EmailNotify',
+        meta: {requiresAuth: true},
+        component: EmailNotify
+    },
+    {
+        path: '/email/verify/',
+        name: 'EmailVerify',
+        component: EmailVerify
     }
 ];
 

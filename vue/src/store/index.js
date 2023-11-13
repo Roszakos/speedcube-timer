@@ -5,7 +5,8 @@ const store = createStore({
     state: {
         user: {
             data: JSON.parse(localStorage.getItem('user')),
-            token: localStorage.getItem('TOKEN')
+            token: localStorage.getItem('TOKEN'),
+            verifyEmail: false
         },
         session: {
             loading: false,
@@ -62,9 +63,11 @@ const store = createStore({
         },
         login({commit}, credentials) {
             return axiosClient.post('/login', credentials)
-                .then(({data}) => {
-                    commit('setUser', data)
-                    return data
+                .then((response) => {
+                    if (response.status === 200) {
+                    commit('setUser', response.data)
+                    }
+                    return response
                 })
                 .catch((err) => {
                     throw err
@@ -170,7 +173,7 @@ const store = createStore({
                         commit('logout')
                         return 401
                     }
-                    throw err
+                    //throw err
                 })
         },
         getProfileData({commit}) {
@@ -226,6 +229,15 @@ const store = createStore({
                 .then(response => {
                     return response
                 }) 
+                .catch(err => {
+                    throw err
+                })
+        },
+        resendEmailVerificationLink({commit}) {
+            return axiosClient.post(`/email/verification-notification`)
+                .then((response) => {
+                    return response
+                })
         }
     },
     mutations: {
