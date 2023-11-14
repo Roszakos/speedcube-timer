@@ -46,6 +46,8 @@ const url = ref(false)
 const success = ref(false)
 const wrongUrl = ref(false)
 
+changeBgColor()
+
 if (route.query.url) {
   url.value = true
   loading.value = true
@@ -68,6 +70,11 @@ if (route.query.url) {
 } else {
   wrongUrl.value = true
 }
+
+function changeBgColor() {
+  document.body.style.backgroundColor = 'rgb(224, 200, 141)'
+}
+
 </script>
 
 <style lang="scss" scoped></style>
