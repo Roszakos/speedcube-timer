@@ -7,6 +7,8 @@ import Profile from '../views/Profile.vue'
 import EmailNotify from '../views/EmailNotify.vue'
 import store from '../store'
 import EmailVerify from '../views/EmailVerify.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+import ResetPassword from '../views/ResetPassword.vue'
 
 const routes = [
     {
@@ -38,6 +40,16 @@ const routes = [
                 path: '/login',
                 name: 'Login',
                 component: Login
+            },
+            {
+                path: '/forgot-password',
+                name: 'ForgotPassword',
+                component: ForgotPassword
+            },
+            {
+                path: '/reset-password',
+                name: 'ResetPassword',
+                component: ResetPassword
             }
         ]
     },
@@ -63,7 +75,8 @@ const routes = [
         path: '/email/verify/',
         name: 'EmailVerify',
         component: EmailVerify
-    }
+    },
+
 ];
 
 const router = createRouter({

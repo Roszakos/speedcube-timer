@@ -238,6 +238,18 @@ const store = createStore({
                 .then((response) => {
                     return response
                 })
+        },
+        sendPasswordResetLink({commit}, email) {
+            return axiosClient.post(`/forgot-password`, {email: email})
+                .then((response) => {
+                    return response
+                })
+        },
+        resetPassword({commit}, data) {
+            return axiosClient.post(`/reset-password`, data)
+                .then((response) => {
+                    return response
+                })
         }
     },
     mutations: {
