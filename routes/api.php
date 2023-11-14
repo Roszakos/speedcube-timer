@@ -50,11 +50,21 @@ Route::get('/email/verify', function () {
 })->middleware('auth:sanctum')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    //return $request;
     $request->fulfill();
 
     return ['success' => true];
 })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
+
+Route::post('/forgot-password', [PasswordController::class, 'sendPasswordResetLink'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', function () {
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [PasswordController::class, 'resetPassword'])
+    ->middleware('guest')
+    ->name('password.update');
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
