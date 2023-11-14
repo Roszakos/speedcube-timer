@@ -64,13 +64,23 @@
         </div>
       </div>
 
-      <div v-if="profileData.sessions" class="w-full h-full">
+      <div v-if="!loadingData" class="w-full h-full">
         <ProfileOverviewComponent v-if="route.params.page == 'overview'" :sessions="profileData.sessions" />
         <ProfileSessionsComponent v-if="route.params.page == 'sessions'" :sessions="profileData.sessions" />
         <ProfileSettingsComponent v-if="route.params.page == 'settings'" :user="profileData.user"
           @notify="showNotification" />
         <ProfilePasswordChange v-if="route.params.page == 'changePassword'" @notify="showNotification" />
         <ProfileAccountDelete v-if="route.params.page == 'deleteAccount'" />
+      </div>
+      <div v-else class="w-full h-full flex items-center justify-center text-4xl">
+        <div class="animate-spin">
+          <svg class="w-20 h-20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25" />
+            <path
+              d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+              class="spinner_z9k8" />
+          </svg>
+        </div>
       </div>
     </div>
     <div
@@ -126,6 +136,8 @@ const profileData = ref({
   sessions: null
 })
 
+const loadingData = ref(true)
+
 const route = useRoute()
 const router = useRouter()
 
@@ -140,6 +152,7 @@ store.dispatch('getProfileData')
     if (response === 401) {
       router.go('/login')
     }
+    loadingData.value = false
     profileData.value.sessions = store.state.profile.sessions
   })
 
@@ -157,3 +170,12 @@ function changeBgColor() {
 
 </script>
 
+<style>
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+</style>
