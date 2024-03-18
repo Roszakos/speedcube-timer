@@ -4,13 +4,13 @@
 
 **Run project locally**
 
-Requirements:
+**Requirements**
 - [Composer](https://getcomposer.org/download/)
 - [Git](https://git-scm.com/downloads)
 - [PHP](https://www.php.net/downloads.php) (version 8.1 or newer)
 - [Node.js](https://nodejs.org/en)
 
-Installation:
+**Installation**
 1. Rename .env.example file to .env
 1. Fill .env file with your database information
 2. Open console and cd to project root directory (speedcube-timer-main)
