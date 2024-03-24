@@ -12,7 +12,7 @@
    `git clone https://github.com/Roszakos/speedcube-timer.git`
 2. Rename .env.example file to .env
 3. Fill .env file with your database information
-4. Open console and navigate to project root directory (`cd speedcube-timer-main`)
+4. Open console and navigate to project root directory (`cd speedcube-timer`)
 5. Run following commands:
 
  - Install required dependencies
