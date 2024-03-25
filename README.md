@@ -6,7 +6,7 @@
 - [PHP](https://www.php.net/downloads.php) (version 8.1 or newer)
 - [Node.js](https://nodejs.org/en)
 
-**Installation**
+**Install locally**
 1. Clone or download the repository
 
    `git clone https://github.com/Roszakos/speedcube-timer.git`
