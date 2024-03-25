@@ -27,7 +27,7 @@
    
     `php artisan migrate`
 
-- Seed the database with dunmmy data, it also creates a test account with verified email (optional)
+- Seed the database with dummy data, it also creates a test account with verified email (optional)
   
     `php artisan db:seed`
 
