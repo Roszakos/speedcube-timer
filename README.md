@@ -31,7 +31,7 @@
   
     `php artisan db:seed`
 
-6. Open another console and cd to vue directory (speedcube-timer-main/vue)
+6. Open another console and cd to vue directory (speedcube-timer/vue)
  
  - Install node dependencies
    
