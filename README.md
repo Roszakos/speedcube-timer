@@ -12,7 +12,7 @@
    `git clone https://github.com/Roszakos/speedcube-timer.git`
 2. Rename .env.example file to .env
 3. Fill .env file with your database information
-4. Open console and navigate to project root directory (`cd speedcube-timer`)
+4. Open console and navigate to project root directory (`speedcube-timer`)
 5. Run following commands:
 
  - Install required dependencies
@@ -31,7 +31,7 @@
   
     `php artisan db:seed`
 
-6. Open another console and cd to vue directory (speedcube-timer/vue)
+6. Open another console and cd to vue directory (`speedcube-timer/vue`)
  
  - Install node dependencies
    
