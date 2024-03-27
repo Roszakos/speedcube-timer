@@ -119,7 +119,7 @@
   </div>
   <div v-if="verifyEmail"
     class="w-full py-1 fixed bottom-0 flex items-center justify-center gap-2 flex-col md:flex-row text-white bg-blue-600">
-    <div class="text-center">Verify your email address so you save your times in database. </div>
+    <div class="text-center">Verify your email address so you can save your times in database. </div>
     <div @click="resendEmailVerificationLink" class="underline cursor-pointer font-semibold">
       Click here to resend verification link.
     </div>
