@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignIdFor(User::class, 'user_id');
             $table->char('hash', 22)->unique();
             $table->string('puzzle');
-            $table->timestamp('start_date');
+            $table->timestamp('start_date')->useCurrent();
         });
     }
 
