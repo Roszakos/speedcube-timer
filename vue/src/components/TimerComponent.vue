@@ -1,16 +1,21 @@
 
 <template>
   <GlobalEvents @keydown.space="handleSpaceDown" @keyup.space="handleSpaceUp" />
-  <div @mousedown="handleMouseDown" @mouseup="handleMouseUp" class="text-center w-full py-10 pb-20 cursor-pointer"
-    :class="[nowSolving ? 'absolute top-[35%] left-0 right-0 ' : '']">
-    <span class="text-7xl lg:text-9xl md:text-8xl font-sans select-none tabular-nums "
-      :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer, 'lg:text-[10rem] md:text-[8rem] text-[6.5rem]': nowSolving }">
+  <div 
+    @mousedown="handleMouseDown" @mouseup="handleMouseUp"
+    @touchstart="handleMouseDown" @touchend="handleMouseUp" 
+    class="text-center w-full py-10 pb-20 cursor-pointer"
+    :class="[nowSolving ? 'absolute top-[35%] left-0 right-0 ' : '']"
+  >
+    <span 
+      class="text-7xl lg:text-9xl md:text-8xl font-sans select-none tabular-nums "
+      :class="{ 'text-red-500': preparingTimer, 'text-green-500': canStartTimer, 'lg:text-[10rem] md:text-[8rem] text-[6.5rem]': nowSolving }"
+    >
       <span id="hours" v-if="hours" class="px-2">{{ hours }}</span>
       <span id="fC" v-if="firstColon">{{ firstColon }}</span>
       <span id="minutes" v-if="minutes" class="px-2">{{ minutes }}</span>
       <span id="sC" v-if="secondColon">{{ secondColon }}</span>
       <span id="seconds" v-if="seconds" class="px-2">{{ seconds }}</span>
-
     </span>
   </div>
 </template>

@@ -8,7 +8,7 @@
           <div class="flex items-center">
             <div class="flex-shrink-0 flex">
               <img class="h-8 w-8" src="https://cdn-icons-png.flaticon.com/512/3430/3430812.png" alt="Speedcube Timer" />
-              <span class="text-[#e3c376] ml-4 font-bold text-lg">SpeedcubeTimer.org</span>
+              <span class="text-[#e3c376] ml-4 font-bold text-lg">SpeedcubeTimer</span>
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
@@ -79,13 +79,14 @@
           <div class="mt-3 space-y-1 px-2">
             <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href"
               class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">{{
-                item.name }}</DisclosureButton>
+                item.name }}
+            </DisclosureButton>
           </div>
         </div>
       </DisclosurePanel>
     </Disclosure>
 
-    <main class="mt-14">
+    <main class="mt-14 pb-20 md:pb-10">
       <div class="mx-auto max-w-screen-2xl py-6 px-6 md:px-8 lg:px-10">
         <!-- Scramble -->
         <ScrambleComponent v-show="!isTimerStarted" ref="scrambleComponent"
@@ -100,12 +101,17 @@
           ">
           <TimesComponent @updateStats="updateStats" @showSolveDetails="showSolveDetails"
             class="min-w-fit bg-[#7f7f88] shadow-[0_0_60px_15px_rgba(0,0,0,0.3)] animate-fade-in-down rounded-sm"
-            ref="timesListComponent" />
+            ref="timesListComponent" 
+          />
           <StatisticsComponent ref="statisticsComponent"
-            class="min-w-fit bg-[#7f7f88] shadow-[0_0_60px_15px_rgba(0,0,0,0.3)] animate-fade-in-down rounded-sm" />
-          <ScramblePreviewComponent ref="scrambleViewComponent"
-            class="lg:col-span-2 md:col-span-2 cursor-pointer rounded-sm shadow-[0_0_60px_15px_rgba(0,0,0,0.3)] bg-[#7f7f88] animate-fade-in-down min-[320px]:block"
-            @click="generateNewScramble" />
+            class="min-w-fit bg-[#7f7f88] shadow-[0_0_60px_15px_rgba(0,0,0,0.3)] animate-fade-in-down rounded-sm" 
+          />
+          <ScramblePreviewComponent 
+            ref="scrambleViewComponent"
+            class="lg:col-span-2 md:col-span-2 cursor-pointer rounded-sm shadow-[0_0_60px_15px_rgba(0,0,0,0.3)] 
+              bg-[#7f7f88] animate-fade-in-down min-[320px]:block"
+            @click="generateNewScramble" 
+          />
         </div>
         <div v-show="!isTimerStarted" class="text-right mt-5 max-w-screen-xl m-auto max-md:max-w-[560px]">
           <button @click="endSession"
