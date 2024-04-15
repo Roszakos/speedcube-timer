@@ -169,6 +169,10 @@ const showModal = ref(false)
 
 changeBgColor()
 
+window.onkeydown = function(e) { 
+    return !(e.keyCode == 32);
+};
+
 store.dispatch('getSessionId')
 
 let sessionHash = store.state.session.hash

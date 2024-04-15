@@ -38,11 +38,6 @@
         <div class="text-4xl tracking-wide">AVERAGE TIME</div>
         <div class="mt-2 text-6xl font-bold">{{ avg }}</div>
       </div>
-      <!-- <div class="col-span-2 border-2 border-slate-700 flex items-center justify-center flex-col relative max-lg:order-5">
-        <div class="text-4xl tracking-wide px-1">BEST SESSION</div>
-        <div class="text-2xl tracking-wide px-1">(AVERAGE)</div>
-        <div class="mt-4 text-6xl font-bold">{{ sessionAvg }}</div>
-      </div> -->
     </div>
   </div>
 </template>

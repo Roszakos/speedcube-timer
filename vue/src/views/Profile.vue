@@ -6,7 +6,7 @@
         <div class="flex items-center">
           <router-link :to="{ name: 'Timer' }" class="flex-shrink-0 flex">
             <img class="h-8 w-8" src="https://cdn-icons-png.flaticon.com/512/3430/3430812.png" alt="Speedcube Timer" />
-            <span class="text-[#e3c376] ml-4 font-bold text-lg">SpeedcubeTimer.org</span>
+            <span class="text-[#e3c376] ml-4 font-bold text-lg">SpeedcubeTimer</span>
           </router-link>
         </div>
         <router-link :to="{ name: 'Timer' }"
