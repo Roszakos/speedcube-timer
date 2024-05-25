@@ -63,6 +63,13 @@ function setNewImage(image) {
 }
 
 function updateUser() {
+  if (store.state.user.data.email == 'test@example.com') {
+    store.commit('notify', {
+      type: 'error',
+      message: 'You can\'t change test account settings.'
+    })
+    return false;
+  }
   errors.value = []
   store.dispatch('updateUser', userModel.value)
     .then(() => {

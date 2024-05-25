@@ -41,10 +41,24 @@ let showDeleteConfirmation = ref(false)
 const errors = ref([])
 
 function deleteAccount() {
+  if (store.state.user.data.email == 'test@example.com') {
+    store.commit('notify', {
+      type: 'error',
+      message: 'You can\'t delete a test account.'
+    })
+    return false;
+  }
   showDeleteConfirmation.value = true
 }
 
 function deleteAccountConfirmed(decision) {
+  if (store.state.user.data.email == 'test@example.com') {
+    store.commit('notify', {
+      type: 'error',
+      message: 'You can\'t delete a test account.'
+    })
+    return false;
+  }
   errors.value = []
   if (decision == 'delete') {
     showDeleteConfirmation.value = false

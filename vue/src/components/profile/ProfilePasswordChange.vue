@@ -46,6 +46,13 @@ let data = ref({
 const errors = ref([])
 
 function changePassword() {
+  if (store.state.user.data.email == 'test@example.com') {
+    store.commit('notify', {
+      type: 'error',
+      message: 'You can\'t change test account password.'
+    })
+    return false;
+  }
   errors.value = []
   store.dispatch('changePassword', data.value)
     .then(() => {
