@@ -1,5 +1,5 @@
 ### Timer web application for speedcubers created with Laravel 10 and Vue 3
-**You can view the project [here](https://php.stealer.pl)**
+
 ## Run project
 
 **Requirements**
